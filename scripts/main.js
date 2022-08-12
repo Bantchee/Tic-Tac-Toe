@@ -34,6 +34,9 @@ let playerO = playerFactory('o', '1', '', 'AI', '#000', 1);
 
 // Renders home page
 function renderHome() {
+    article.removeAttribute('class');
+    article.classList.add('home-article');
+
     // Div : contianing Player x VS Player O
     const divContainer = document.createElement('div');
     divContainer.classList.add('container');
@@ -229,10 +232,8 @@ function clearArticle() {
 
 // Render Game Page
 function renderGame() {
-    const div = document.createElement('div');
-    div.innerHTML = 'hi';
-    article.appendChild(div);
-
+    article.removeAttribute('class');
+    article.classList.add('game-article');
     // Player X
 
     // Div : Board Container
@@ -245,7 +246,11 @@ function renderGame() {
                 console.log('work');
                 const divSquare = document.createElement('div');
                 divSquare.classList.add('square');
-                divSquare.textContent = squareValue;
+                    // Para : Symbole
+                    const paraSymbol = document.createElement('para');
+                    paraSymbol.classList.add('symbol');
+                    paraSymbol.textContent = squareValue;
+                    divSquare.appendChild(paraSymbol);
                 divSquare.addEventListener('click', () => {
                     // Update gameBoard.board[rowIndex, colIndex] with squareValue
                     squareValue = gameState.xTurn ? 'X' : 'O';

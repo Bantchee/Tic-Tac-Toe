@@ -1,14 +1,33 @@
-article .game-board {
+.game-article {
     display: grid;
+    grid: 1fr 5fr 1fr; 
+}
+
+.game-article .game-board {
+    display: grid;
+    width: 100%;
+    height: auto;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+    background-color: black;
+    border-radius: 5px;
 }
 
-article .game-board .square {
-    width: 50px;
-    height: 50px;
-    background-color: blue;
+.game-article .game-board .square {
+    background-color: White;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-article .game-board .square:hover {
-    background-color: red;
+.game-article .game-board .square:hover {
+    background-color: #ccc;
+}
+
+.game-article .game-board .square .symbol {
+    padding: 0px;
+    margin: 0px;
+    font-size: 30px;
+    font-weight: bold;
 }
