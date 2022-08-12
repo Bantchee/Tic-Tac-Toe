@@ -1,0 +1,40 @@
+/* Article Avatar Modal */
+:root {
+    --modal-avatar-size: 50px;
+}
+
+.background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .3);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.background .avatar-modal {
+    width: calc(var(--modal-avatar-size) * 2 + 20px);
+    height: calc(var(--modal-avatar-size) + 20px);
+    background-color: white;
+    padding: 20px;
+    border: 5px solid black;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.background .avatar-modal img {
+    width: var(--modal-avatar-size);
+    height: var(--modal-avatar-size);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.background .avatar-modal img:hover {
+    width: calc(var(--modal-avatar-size) + 10px);
+    height: calc(var(--modal-avatar-size) + 10px);
+    background-color: #ccc;
+    cursor: pointer;
+}
