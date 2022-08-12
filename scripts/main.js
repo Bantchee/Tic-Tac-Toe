@@ -263,5 +263,5 @@ function renderGame() {
     article.appendChild(divGameBoard);
 }
 
-// renderHome();
-renderGame();
+renderHome();
+// renderGame();
