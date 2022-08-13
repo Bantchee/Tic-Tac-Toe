@@ -15,11 +15,13 @@ const gameBoard = (() => {
 
 // Module - Game State
 // Num, Boolean, Num, Num
-const gameState = ((currentRound, playerXTurn, xWins, oWins) => {
-    return {currentRound: 1, 
+const gameState = (() => {
+    return {
+        currentRound: 1, 
         xTurn: true, 
         xWins: 0, 
-        yWins: 0,
+        oWins: 0,
+        roundOver: false,
     };
 })();
 
@@ -29,8 +31,8 @@ const playerFactory = (symbol, avatar, name, type, color, difficulty) => {
     return {symbol, avatar, name, type, color, difficulty};
 };
 
-let playerX = playerFactory('x', '1', '', 'HUMAN', '#000', 0);
-let playerO = playerFactory('o', '1', '', 'AI', '#000', 1);
+let playerX = playerFactory('X', '1', '', 'HUMAN', '#000', 0);
+let playerO = playerFactory('O', '1', '', 'AI', '#000', 1);
 
 // Renders home page
 function renderHome() {
@@ -243,22 +245,15 @@ function renderGame() {
         // 3 by 3 divs
         gameBoard.board.forEach((row, rowIndex) => {
             row.forEach((squareValue, colIndex) => {
-                console.log('work');
                 const divSquare = document.createElement('div');
                 divSquare.classList.add('square');
-                    // Para : Symbole
+                    // Para : Symbol
                     const paraSymbol = document.createElement('para');
                     paraSymbol.classList.add('symbol');
                     paraSymbol.textContent = squareValue;
                     divSquare.appendChild(paraSymbol);
                 divSquare.addEventListener('click', () => {
-                    // Update gameBoard.board[rowIndex, colIndex] with squareValue
-                    squareValue = gameState.xTurn ? 'X' : 'O';
-                    gameBoard.board[rowIndex][colIndex] = squareValue;
-
-                    // Change player turn
-                    gameState.xTurn = !gameState.xTurn;
-
+                    addMarkToBoard(rowIndex,colIndex);
                     clearArticle();
                     renderGame();
                 });
@@ -266,7 +261,113 @@ function renderGame() {
             });
         });
     article.appendChild(divGameBoard);
+
+    console.log(checkRoundOver());
+    console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins);
+
+    //Check if Round Over
+    // if(checkRoundOver()) {
+
+    // }
 }
 
-renderHome();
-// renderGame();
+// Adds a Mark to the Board
+// In > Out : Num Num > Undefined
+function addMarkToBoard(x,y) {
+    // Determing the Symbol to be assigned
+    squareValue = gameState.xTurn ? 'X' : 'O'
+
+    if(gameBoard.board[x][y] != 'X' && gameBoard.board[x][y] != 'O') {
+        // ad squareValue to board
+        gameBoard.board[x][y] = squareValue;
+
+        // Other play's turn
+        gameState.xTurn = !gameState.xTurn;
+    }
+}
+
+// Function that determines if round is over
+// In > Out :
+// Round over Options :
+    // Player X Wins (Three X in a row)
+    // Player O Wins (Three O in a row)
+    // Tie (All board squares are full)
+function checkRoundOver() {
+    // set game board to alt variable
+    let b = gameBoard.board;
+
+    // Arr of symbols to each
+    let symbolArr = [playerO.symbol, playerX.symbol];
+
+    symbolArr.forEach((symbol) => {
+        // b[y][x]
+        // Left to Right
+        if(b[0][0] === symbol && b[0][1] === symbol && b[0][2] === symbol) {
+            // (0,0) (0,1) (0,2)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        } else if(b[1][0] === symbol && b[1][1] === symbol && b[1][2] === symbol) {
+            // (1,0) (1,1) (1,2)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        } else if(b[2][0] === symbol && b[2][1] === symbol && b[2][2] === symbol) {
+            // (2,0) (2,1) (2,2)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        }
+
+        // Up to Down
+        else if(b[0][0] === symbol && b[1][0] === symbol && b[2][0] === symbol) {
+            // (0,0) (1,0) (2,0)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        } else if(b[0][1] === symbol && b[1][1] === symbol && b[2][1] === symbol) {
+            // (0,1) (1,1) (2,1)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        } else if(b[0][2] === symbol && b[1][2] === symbol && b[2][2] === symbol) {
+            // (0,2) (1,2) (2,2)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        }
+
+        // Back Slash
+        else if(b[0][2] === symbol && b[1][1] === symbol && b[2][0] === symbol) {
+            // (0,2) (1,1) (2,0)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        }
+        
+        // Forward Slash
+        else if(b[0][0] === symbol && b[1][1] === symbol && b[2][2] === symbol) {
+            // (0,0) (1,1) (2,2)
+            // increase Player's Score
+            playerWins(symbol);
+            // Break  Out of Every
+            gameState.roundOver = true;
+        }
+    });
+}
+
+// Increase the Win score of a player by 1
+// In > Out : Character > Void
+function playerWins(symbol) {
+    symbol === 'X' ? gameState.xWins += 1: gameState.oWins += 1;
+}
+
+// renderHome();
+renderGame();
