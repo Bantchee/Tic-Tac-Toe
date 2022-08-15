@@ -107,7 +107,7 @@ function renderPlayerPicker(container, player) {
                     const avatarImg = document.createElement('img');
                     avatarImg.classList.add('avatar-img');
                     avatarImg.classList.add(player.symbol === 'X' ? 'x-img' : 'o-img');
-                    avatarImg.setAttribute('src', `./icons/${player.type.toLowerCase() + '_' + player.symbol + player.avatar}.svg`);
+                    avatarImg.setAttribute('src', `./icons/${player.type.toLowerCase() + '_' + player.symbol.toLowerCase() + player.avatar}.svg`);
                     BtnAvatar.append(avatarImg);
 
                 // Modal : Avatar Picker
@@ -243,7 +243,7 @@ function renderAvatarModal(player) {
         avaModal.classList.add('avatar-modal');
         avatarArr.forEach((value) => {
             const ava = document.createElement('img');
-            ava.setAttribute('src', `./icons/${player.type.toLowerCase() + '_' + player.symbol + value}.svg`);
+            ava.setAttribute('src', `./icons/${player.type.toLowerCase() + '_' + player.symbol.toLowerCase() + value}.svg`);
             ava.addEventListener('click', () => {
                 player.avatar = value;
                 document.body.removeChild(background);
@@ -309,7 +309,7 @@ function renderGame() {
             const imgPlayerXAvatar = document.createElement('img');
             imgPlayerXAvatar.classList.add('player-x-avatar', 'avatar-img');
             imgPlayerXAvatar.style = playerX.filter;
-            imgPlayerXAvatar.setAttribute('src', `./icons/${playerX.type.toLowerCase() + '_' + playerX.symbol + playerX.avatar}.svg`);
+            imgPlayerXAvatar.setAttribute('src', `./icons/${playerX.type.toLowerCase() + '_' + playerX.symbol.toLowerCase() + playerX.avatar}.svg`);
             divPlayerX.appendChild(imgPlayerXAvatar);
 
             // Para : Player X Wins
@@ -395,7 +395,7 @@ function renderGame() {
                   const imgPlayerOAvatar = document.createElement('img');
                   imgPlayerOAvatar.classList.add('player-o-avatar', 'avatar-img');
                   imgPlayerOAvatar.style = playerO.filter;
-                  imgPlayerOAvatar.setAttribute('src', `./icons/${playerO.type.toLowerCase() + '_' + playerO.symbol + playerO.avatar}.svg`);
+                  imgPlayerOAvatar.setAttribute('src', `./icons/${playerO.type.toLowerCase() + '_' + playerO.symbol.toLowerCase() + playerO.avatar}.svg`);
                   divPlayerO.appendChild(imgPlayerOAvatar);
       
                   // Para : Player X Wins
