@@ -107,7 +107,7 @@ function renderPlayerPicker(container, player) {
                     const avatarImg = document.createElement('img');
                     avatarImg.classList.add('avatar-img');
                     avatarImg.classList.add(player.symbol === 'X' ? 'x-img' : 'o-img');
-                    avatarImg.setAttribute('src', `icons/${player.type.toLowerCase() + '_' + player.symbol + player.avatar}.svg`);
+                    avatarImg.setAttribute('src', `./icons/${player.type.toLowerCase() + '_' + player.symbol + player.avatar}.svg`);
                     BtnAvatar.append(avatarImg);
 
                 // Modal : Avatar Picker
@@ -240,7 +240,7 @@ function renderAvatarModal(player) {
         avaModal.classList.add('avatar-modal');
         avatarArr.forEach((value) => {
             const ava = document.createElement('img');
-            ava.setAttribute('src', `icons/${player.type.toLowerCase() + '_' + player.symbol + value}.svg`);
+            ava.setAttribute('src', `./icons/${player.type.toLowerCase() + '_' + player.symbol + value}.svg`);
             ava.addEventListener('click', () => {
                 player.avatar = value;
                 document.body.removeChild(background);
@@ -294,13 +294,13 @@ function renderGame() {
             // Img : Turn Indicator SVG
             const imgPlayerXTurnIndicator = document.createElement('img');
             imgPlayerXTurnIndicator.classList.add('player-x-turn', 'visible');
-            imgPlayerXTurnIndicator.setAttribute('src', 'icons/turn_indicator.svg');
+            imgPlayerXTurnIndicator.setAttribute('src', './icons/turn_indicator.svg');
             divPlayerX.appendChild(imgPlayerXTurnIndicator);
 
             // Img : Player X Avatar SVG
             const imgPlayerXAvatar = document.createElement('img');
             imgPlayerXAvatar.classList.add('player-x-avatar', 'avatar-img');
-            imgPlayerXAvatar.setAttribute('src', `icons/${playerX.type.toLowerCase() + '_' + playerX.symbol + playerX.avatar}.svg`);
+            imgPlayerXAvatar.setAttribute('src', `./icons/${playerX.type.toLowerCase() + '_' + playerX.symbol + playerX.avatar}.svg`);
             divPlayerX.appendChild(imgPlayerXAvatar);
 
             // Para : Player X Wins
@@ -365,13 +365,13 @@ function renderGame() {
                   // Img : Turn Indicator SVG
                   const imgPlayerOTurnIndicator = document.createElement('img');
                   imgPlayerOTurnIndicator.classList.add('player-o-turn', 'visible');
-                  imgPlayerOTurnIndicator.setAttribute('src', 'icons/turn_indicator.svg');
+                  imgPlayerOTurnIndicator.setAttribute('src', './icons/turn_indicator.svg');
                   divPlayerO.appendChild(imgPlayerOTurnIndicator);
       
                   // Img : Player X Avatar SVG
                   const imgPlayerOAvatar = document.createElement('img');
                   imgPlayerOAvatar.classList.add('player-o-avatar', 'avatar-img');
-                  imgPlayerOAvatar.setAttribute('src', `icons/${playerO.type.toLowerCase() + '_' + playerO.symbol + playerO.avatar}.svg`);
+                  imgPlayerOAvatar.setAttribute('src', `./icons/${playerO.type.toLowerCase() + '_' + playerO.symbol + playerO.avatar}.svg`);
                   divPlayerO.appendChild(imgPlayerOAvatar);
       
                   // Para : Player X Wins
@@ -487,8 +487,8 @@ function playerWins(symbol) {
     symbol === 'X' ? gameState.xWins += 1: gameState.oWins += 1;
 }
 
-// renderHome();
-renderGame();
+renderHome();
+// renderGame();
 
 
 
