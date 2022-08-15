@@ -300,6 +300,7 @@ function renderGame() {
             // Img : Player X Avatar SVG
             const imgPlayerXAvatar = document.createElement('img');
             imgPlayerXAvatar.classList.add('player-x-avatar', 'avatar-img');
+            imgPlayerXAvatar.style = playerX.filter;
             imgPlayerXAvatar.setAttribute('src', `./icons/${playerX.type.toLowerCase() + '_' + playerX.symbol + playerX.avatar}.svg`);
             divPlayerX.appendChild(imgPlayerXAvatar);
 
@@ -371,6 +372,7 @@ function renderGame() {
                   // Img : Player X Avatar SVG
                   const imgPlayerOAvatar = document.createElement('img');
                   imgPlayerOAvatar.classList.add('player-o-avatar', 'avatar-img');
+                  imgPlayerOAvatar.style = playerO.filter;
                   imgPlayerOAvatar.setAttribute('src', `./icons/${playerO.type.toLowerCase() + '_' + playerO.symbol + playerO.avatar}.svg`);
                   divPlayerO.appendChild(imgPlayerOAvatar);
       
