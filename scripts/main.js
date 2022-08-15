@@ -6,9 +6,13 @@ const article = document.querySelector('article');
 
 // Module - Game Board Object
 const gameBoard = (() => {
-    function resetBoard() {
-
-    }
+    const resetBoard = (b) => {
+        gameBoard.board.forEach((row, rowIndex) => {
+            row.forEach((square, squareIndex) => {
+                gameBoard.board[rowIndex][squareIndex] = '';
+            })
+        })
+    };
 
     return {
         board:[
@@ -281,8 +285,19 @@ function renderGame() {
                     paraSymbol.classList.add('symbol');
                     paraSymbol.textContent = squareValue;
                     divSquare.appendChild(paraSymbol);
+                    
+                // Game Loop That Updates Article
                 divSquare.addEventListener('click', () => {
                     addMarkToBoard(rowIndex,colIndex);
+                        // Check if Round Over
+                        checkRoundOver();
+
+                        // Do Something when Round Over
+                        if(gameState.roundOver) {
+                            gameState.currentRound += 1;
+                            gameBoard.resetBoard();
+                        }
+                        console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
                     clearArticle();
                     renderGame();
                 });
@@ -290,19 +305,6 @@ function renderGame() {
             });
         });
     article.appendChild(divGameBoard);
-
-    
-    
-
-    // Check if Round Over
-    checkRoundOver();
-
-    // Do Something when Round Over
-    if(gameState.roundOver) {
-        gameState.currentRound += 1;
-        gameBoard.resetBoard();
-    }
-    console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
 }
 
 // Adds a Mark to the Board
