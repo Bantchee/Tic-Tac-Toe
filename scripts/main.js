@@ -589,8 +589,8 @@ function playerWins(symbol) {
     symbol === 'X' ? gameState.xWins += 1: gameState.oWins += 1;
 }
 
-// renderHome();
-renderGame();
+renderHome();
+// renderGame();
 
 
 
