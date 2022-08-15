@@ -14,24 +14,87 @@ const gameBoard = (() => {
         })
     };
 
+    const clearGameOverModal = () => {
+        document.body.removeChild(document.querySelector('.game-over-background'));
+    }
+    
+    const gameOverModal = () => {
+        // Div : Background Black 30% opacity
+        const divBackground = document.createElement('div');
+        divBackground.classList.add('game-over-background');
+            // Div : Container
+            const divContainer = document.createElement('div');
+            divContainer.classList.add('game-over-container')
+                // Span : Exit
+                const spanExit = document.createElement('span');
+                spanExit.classList.add('game-over-exit')
+                spanExit.textContent = 'X';
+                    // Click Eventlistiner => gameboard.clearGameOverModal()
+                    spanExit.addEventListener('click', () => {
+                        clearGameOverModal();
+                    });
+                divContainer.appendChild(spanExit);
+                    
+                // Btn : Play Again
+                const btnPlayAgain = document.createElement('button');
+                btnPlayAgain.classList.add('.btn-play-again');
+                btnPlayAgain.textContent = 'Play Again';
+                    // Click Eventlistiner =>
+                    btnPlayAgain.addEventListener('click', () => {
+                        gameState.reset();
+                        gameBoard.resetBoard();
+                        clearGameOverModal();
+                        clearArticle();
+                        renderGame();
+                    });
+                divContainer.appendChild(btnPlayAgain);
+                
+                // Btn : New Game
+                const btnNewGame = document.createElement('button');
+                btnNewGame.classList.add('.btn-new-game');
+                btnNewGame.textContent = 'New Game';
+                    // Click Eventlistiner =>
+                    btnNewGame.addEventListener('click', () => {
+                        
+                        gameState.reset();
+                        gameBoard.resetBoard();
+                        clearGameOverModal();
+                        clearArticle();
+                        renderHome();
+                    });
+                divContainer.appendChild(btnNewGame);
+            divBackground.appendChild(divContainer);
+        document.body.appendChild(divBackground);
+    };
+
     return {
         board:[
         ['', '', ''],
         ['', '', ''],
         ['', '', '']],
         resetBoard,
+        gameOverModal,
     }
 })();
 
 // Module - Game State
 // Num, Boolean, Num, Num
 const gameState = (() => {
+    const reset = () => {
+        gameState.currentRound = 1;
+        gameState.xTurn = true;
+        gameState.xWins = 0;
+        gameState.oWins = 0;
+        gameState.roundOver = false;
+    };
+
     return {
         currentRound: 1, 
         xTurn: true, 
         xWins: 0, 
         oWins: 0,
         roundOver: false,
+        reset,
     };
 })();
 
@@ -322,6 +385,9 @@ function renderGame() {
             const btnPlayerXForfeit = document.createElement('button');
             btnPlayerXForfeit.classList.add('forfeit');
             btnPlayerXForfeit.textContent = 'Forfeit';
+            btnPlayerXForfeit.addEventListener('click', () => {
+                gameBoard.gameOverModal();
+              });
             divPlayerX.appendChild(btnPlayerXForfeit);
 
         divContents.appendChild(divPlayerX);
@@ -408,6 +474,9 @@ function renderGame() {
                   const btnPlayerOForfeit = document.createElement('button');
                   btnPlayerOForfeit.classList.add('forfeit');
                   btnPlayerOForfeit.textContent = 'Forfeit';
+                  btnPlayerOForfeit.addEventListener('click', () => {
+                    gameBoard.gameOverModal();
+                  });
                   divPlayerO.appendChild(btnPlayerOForfeit);
         divContents.appendChild(divPlayerO);
     article.appendChild(divContents);
@@ -440,6 +509,10 @@ function checkRoundOver() {
 
     // Arr of symbols to each
     let symbolArr = [playerO.symbol, playerX.symbol];
+
+    // If All squares of filled
+    gameState.roundOver = gameBoard.board.every((row, rowIndex) =>
+        row.every((square, squareIndex) => square !== ''));
 
     symbolArr.forEach((symbol) => {
         // b[y][x]
@@ -511,8 +584,8 @@ function playerWins(symbol) {
     symbol === 'X' ? gameState.xWins += 1: gameState.oWins += 1;
 }
 
-renderHome();
-// renderGame();
+// renderHome();
+renderGame();
 
 
 
