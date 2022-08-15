@@ -123,6 +123,9 @@ function renderPlayerPicker(container, player) {
 
                 // Input : Name
                 const inputName = document.createElement('input');
+                inputName.addEventListener('change', (event) => {
+                    player.name = event.target.value;
+                });
                 inputName.setAttribute('placeholder', 'Name');
                 divInputs.appendChild(inputName);
 
@@ -283,19 +286,24 @@ function renderGame() {
 
         // Player X
         const divPlayerX = document.createElement('div');
-        divPlayerX.classList.add('div-player-x');
-
-            // Para : Player X Wins
-            const paraPlayerXName = document.createElement('p');
-            paraPlayerXName.classList.add('player-x-name');
-            paraPlayerXName.textContent = playerX.name;
-            divPlayerX.appendChild(paraPlayerXName);
+        divPlayerX.classList.add('div-player');
 
             // Img : Turn Indicator SVG
             const imgPlayerXTurnIndicator = document.createElement('img');
-            imgPlayerXTurnIndicator.classList.add('player-x-turn', 'visible');
+            imgPlayerXTurnIndicator.classList.add('turn-indicator');
+            if(gameState.xTurn) {
+                imgPlayerXTurnIndicator.classList.remove('hidden');
+              } else {
+                imgPlayerXTurnIndicator.classList.add('hidden');
+              }
             imgPlayerXTurnIndicator.setAttribute('src', './icons/turn_indicator.svg');
             divPlayerX.appendChild(imgPlayerXTurnIndicator);
+
+            // Para : Player X Name
+            const paraPlayerXName = document.createElement('p');
+            paraPlayerXName.classList.add('player-name');
+            paraPlayerXName.textContent = playerX.name;
+            divPlayerX.appendChild(paraPlayerXName);
 
             // Img : Player X Avatar SVG
             const imgPlayerXAvatar = document.createElement('img');
@@ -306,13 +314,13 @@ function renderGame() {
 
             // Para : Player X Wins
             const paraPlayerXWins = document.createElement('p');
-            paraPlayerXWins.classList.add('player-x-wins');
+            paraPlayerXWins.classList.add('player-wins');
             paraPlayerXWins.textContent = gameState.xWins;
             divPlayerX.appendChild(paraPlayerXWins);
 
             // Btn : Forfeit
             const btnPlayerXForfeit = document.createElement('button');
-            btnPlayerXForfeit.classList.add('player-x-wins');
+            btnPlayerXForfeit.classList.add('forfeit');
             btnPlayerXForfeit.textContent = 'Forfeit';
             divPlayerX.appendChild(btnPlayerXForfeit);
 
@@ -327,11 +335,19 @@ function renderGame() {
                 row.forEach((squareValue, colIndex) => {
                     const divSquare = document.createElement('div');
                     divSquare.classList.add('square');
-                        // Para : Symbol
-                        const paraSymbol = document.createElement('para');
-                        paraSymbol.classList.add('symbol');
-                        paraSymbol.textContent = squareValue;
-                        divSquare.appendChild(paraSymbol);
+                        if(squareValue !== '') {
+                            // Img : Symbol
+                            const imgSymbol = document.createElement('img');
+                            imgSymbol.classList.add('symbol');
+                            if(squareValue === 'X') {
+                                imgSymbol.setAttribute('src', './icons/x_symbol.svg');
+                                imgSymbol.style = playerX.filter;
+                            } else if(squareValue === 'O') {
+                                imgSymbol.setAttribute('src', './icons/o_symbol.svg');
+                                imgSymbol.style = playerO.filter;
+                            }
+                            divSquare.appendChild(imgSymbol);
+                        }
 
                     // Game Loop That Updates Article
                     divSquare.addEventListener('click', () => {
@@ -356,18 +372,24 @@ function renderGame() {
 
         // Player O
         const divPlayerO = document.createElement('div');
-        divPlayerO.classList.add('div-player-o');
-                  // Para : Player X Wins
-                  const paraPlayerOName = document.createElement('p');
-                  paraPlayerOName.classList.add('player-o-name');
-                  paraPlayerOName.textContent = playerO.name;
-                  divPlayerO.appendChild(paraPlayerOName);
+        divPlayerO.classList.add('div-player');
       
                   // Img : Turn Indicator SVG
                   const imgPlayerOTurnIndicator = document.createElement('img');
-                  imgPlayerOTurnIndicator.classList.add('player-o-turn', 'visible');
+                  imgPlayerOTurnIndicator.classList.add('turn-indicator');
+                  if(gameState.xTurn) {
+                    imgPlayerOTurnIndicator.classList.add('hidden');
+                  } else {
+                    imgPlayerOTurnIndicator.classList.remove('hidden');
+                  }
                   imgPlayerOTurnIndicator.setAttribute('src', './icons/turn_indicator.svg');
                   divPlayerO.appendChild(imgPlayerOTurnIndicator);
+
+                  // Para : Player O Name
+                  const paraPlayerOName = document.createElement('p');
+                  paraPlayerOName.classList.add('player-name');
+                  paraPlayerOName.textContent = playerO.name;
+                  divPlayerO.appendChild(paraPlayerOName);
       
                   // Img : Player X Avatar SVG
                   const imgPlayerOAvatar = document.createElement('img');
@@ -378,13 +400,13 @@ function renderGame() {
       
                   // Para : Player X Wins
                   const paraPlayerOWins = document.createElement('p');
-                  paraPlayerOWins.classList.add('player-o-wins');
+                  paraPlayerOWins.classList.add('player-wins');
                   paraPlayerOWins.textContent = gameState.oWins;
                   divPlayerO.appendChild(paraPlayerOWins);
       
                   // Btn : Forfeit
                   const btnPlayerOForfeit = document.createElement('button');
-                  btnPlayerOForfeit.classList.add('player-o-wins');
+                  btnPlayerOForfeit.classList.add('forfeit');
                   btnPlayerOForfeit.textContent = 'Forfeit';
                   divPlayerO.appendChild(btnPlayerOForfeit);
         divContents.appendChild(divPlayerO);
