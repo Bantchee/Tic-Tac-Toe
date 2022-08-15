@@ -34,35 +34,40 @@ const gameBoard = (() => {
                         clearGameOverModal();
                     });
                 divContainer.appendChild(spanExit);
+
+                // Btn Div
+                const divBtns = document.createElement('div');
+                divBtns.classList.add('game-over-div-btn');
                     
-                // Btn : Play Again
-                const btnPlayAgain = document.createElement('button');
-                btnPlayAgain.classList.add('.btn-play-again');
-                btnPlayAgain.textContent = 'Play Again';
-                    // Click Eventlistiner =>
-                    btnPlayAgain.addEventListener('click', () => {
-                        gameState.reset();
-                        gameBoard.resetBoard();
-                        clearGameOverModal();
-                        clearArticle();
-                        renderGame();
-                    });
-                divContainer.appendChild(btnPlayAgain);
-                
-                // Btn : New Game
-                const btnNewGame = document.createElement('button');
-                btnNewGame.classList.add('.btn-new-game');
-                btnNewGame.textContent = 'New Game';
-                    // Click Eventlistiner =>
-                    btnNewGame.addEventListener('click', () => {
-                        
-                        gameState.reset();
-                        gameBoard.resetBoard();
-                        clearGameOverModal();
-                        clearArticle();
-                        renderHome();
-                    });
-                divContainer.appendChild(btnNewGame);
+                    // Btn : Play Again
+                    const btnPlayAgain = document.createElement('button');
+                    btnPlayAgain.classList.add('game-over-btn');
+                    btnPlayAgain.textContent = 'Play Again';
+                        // Click Eventlistiner =>
+                        btnPlayAgain.addEventListener('click', () => {
+                            gameState.reset();
+                            gameBoard.resetBoard();
+                            clearGameOverModal();
+                            clearArticle();
+                            renderGame();
+                        });
+                        divBtns.appendChild(btnPlayAgain);
+                    
+                    // Btn : New Game
+                    const btnNewGame = document.createElement('button');
+                    btnNewGame.classList.add('game-over-btn');
+                    btnNewGame.textContent = 'New Game';
+                        // Click Eventlistiner =>
+                        btnNewGame.addEventListener('click', () => {
+                            
+                            gameState.reset();
+                            gameBoard.resetBoard();
+                            clearGameOverModal();
+                            clearArticle();
+                            renderHome();
+                        });
+                    divBtns.appendChild(btnNewGame);
+                divContainer.appendChild(divBtns);
             divBackground.appendChild(divContainer);
         document.body.appendChild(divBackground);
     };
