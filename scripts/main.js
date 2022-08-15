@@ -41,8 +41,8 @@ const playerFactory = (symbol, avatar, name, type, filter, difficulty) => {
     return {symbol, avatar, name, type, filter, difficulty};
 };
 
-let playerX = playerFactory('X', '1', '', 'HUMAN', '', 0);
-let playerO = playerFactory('O', '1', '', 'AI', '', 1);
+let playerX = playerFactory('X', '1', 'Default X', 'HUMAN', '', 0);
+let playerO = playerFactory('O', '1', 'Default O', 'AI', '', 1);
 
 // Renders home page
 function renderHome() {
@@ -269,42 +269,124 @@ function clearArticle() {
 function renderGame() {
     article.removeAttribute('class');
     article.classList.add('game-article');
-    // Player X
 
-    // Div : Board Container
-    const divGameBoard = document.createElement('div');
-    divGameBoard.classList.add('game-board')
-    // Use gameBoard object;
-        // 3 by 3 divs
-        gameBoard.board.forEach((row, rowIndex) => {
-            row.forEach((squareValue, colIndex) => {
-                const divSquare = document.createElement('div');
-                divSquare.classList.add('square');
-                    // Para : Symbol
-                    const paraSymbol = document.createElement('para');
-                    paraSymbol.classList.add('symbol');
-                    paraSymbol.textContent = squareValue;
-                    divSquare.appendChild(paraSymbol);
-                    
-                // Game Loop That Updates Article
-                divSquare.addEventListener('click', () => {
-                    addMarkToBoard(rowIndex,colIndex);
-                        // Check if Round Over
-                        checkRoundOver();
+    // Current Round
+    const paraCurrentRound = document.createElement('p');
+    paraCurrentRound.classList.add('current-round');
+    paraCurrentRound.textContent = "Round: " + gameState.currentRound;
+    article.appendChild(paraCurrentRound);
 
-                        // Do Something when Round Over
-                        if(gameState.roundOver) {
-                            gameState.currentRound += 1;
-                            gameBoard.resetBoard();
-                        }
-                        console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
-                    clearArticle();
-                    renderGame();
+    // Div : Contents
+    const divContents = document.createElement('div');
+    divContents.classList.add('contents');
+
+
+        // Player X
+        const divPlayerX = document.createElement('div');
+        divPlayerX.classList.add('div-player-x');
+
+            // Para : Player X Wins
+            const paraPlayerXName = document.createElement('p');
+            paraPlayerXName.classList.add('player-x-name');
+            paraPlayerXName.textContent = playerX.name;
+            divPlayerX.appendChild(paraPlayerXName);
+
+            // Img : Turn Indicator SVG
+            const imgPlayerXTurnIndicator = document.createElement('img');
+            imgPlayerXTurnIndicator.classList.add('player-x-turn', 'visible');
+            imgPlayerXTurnIndicator.setAttribute('src', 'icons/turn_indicator.svg');
+            divPlayerX.appendChild(imgPlayerXTurnIndicator);
+
+            // Img : Player X Avatar SVG
+            const imgPlayerXAvatar = document.createElement('img');
+            imgPlayerXAvatar.classList.add('player-x-avatar', 'avatar-img');
+            imgPlayerXAvatar.setAttribute('src', `icons/${playerX.type.toLowerCase() + '_' + playerX.symbol + playerX.avatar}.svg`);
+            divPlayerX.appendChild(imgPlayerXAvatar);
+
+            // Para : Player X Wins
+            const paraPlayerXWins = document.createElement('p');
+            paraPlayerXWins.classList.add('player-x-wins');
+            paraPlayerXWins.textContent = gameState.xWins;
+            divPlayerX.appendChild(paraPlayerXWins);
+
+            // Btn : Forfeit
+            const btnPlayerXForfeit = document.createElement('button');
+            btnPlayerXForfeit.classList.add('player-x-wins');
+            btnPlayerXForfeit.textContent = 'Forfeit';
+            divPlayerX.appendChild(btnPlayerXForfeit);
+
+        divContents.appendChild(divPlayerX);
+
+        // Div : Board Container
+        const divGameBoard = document.createElement('div');
+        divGameBoard.classList.add('game-board')
+        // Use gameBoard object;
+            // 3 by 3 divs
+            gameBoard.board.forEach((row, rowIndex) => {
+                row.forEach((squareValue, colIndex) => {
+                    const divSquare = document.createElement('div');
+                    divSquare.classList.add('square');
+                        // Para : Symbol
+                        const paraSymbol = document.createElement('para');
+                        paraSymbol.classList.add('symbol');
+                        paraSymbol.textContent = squareValue;
+                        divSquare.appendChild(paraSymbol);
+
+                    // Game Loop That Updates Article
+                    divSquare.addEventListener('click', () => {
+                        addMarkToBoard(rowIndex,colIndex);
+                            // Check if Round Over
+                            checkRoundOver();
+
+                            // Do Something when Round Over
+                            if(gameState.roundOver) {
+                                gameState.currentRound += 1;
+                                gameBoard.resetBoard();
+                                gameState.roundOver = false;
+                            }
+                            console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
+                        clearArticle();
+                        renderGame();
+                    });
+                    divGameBoard.appendChild(divSquare);
                 });
-                divGameBoard.appendChild(divSquare);
             });
-        });
-    article.appendChild(divGameBoard);
+        divContents.appendChild(divGameBoard);
+
+        // Player O
+        const divPlayerO = document.createElement('div');
+        divPlayerO.classList.add('div-player-o');
+                  // Para : Player X Wins
+                  const paraPlayerOName = document.createElement('p');
+                  paraPlayerOName.classList.add('player-o-name');
+                  paraPlayerOName.textContent = playerO.name;
+                  divPlayerO.appendChild(paraPlayerOName);
+      
+                  // Img : Turn Indicator SVG
+                  const imgPlayerOTurnIndicator = document.createElement('img');
+                  imgPlayerOTurnIndicator.classList.add('player-o-turn', 'visible');
+                  imgPlayerOTurnIndicator.setAttribute('src', 'icons/turn_indicator.svg');
+                  divPlayerO.appendChild(imgPlayerOTurnIndicator);
+      
+                  // Img : Player X Avatar SVG
+                  const imgPlayerOAvatar = document.createElement('img');
+                  imgPlayerOAvatar.classList.add('player-o-avatar', 'avatar-img');
+                  imgPlayerOAvatar.setAttribute('src', `icons/${playerO.type.toLowerCase() + '_' + playerO.symbol + playerO.avatar}.svg`);
+                  divPlayerO.appendChild(imgPlayerOAvatar);
+      
+                  // Para : Player X Wins
+                  const paraPlayerOWins = document.createElement('p');
+                  paraPlayerOWins.classList.add('player-o-wins');
+                  paraPlayerOWins.textContent = gameState.oWins;
+                  divPlayerO.appendChild(paraPlayerOWins);
+      
+                  // Btn : Forfeit
+                  const btnPlayerOForfeit = document.createElement('button');
+                  btnPlayerOForfeit.classList.add('player-o-wins');
+                  btnPlayerOForfeit.textContent = 'Forfeit';
+                  divPlayerO.appendChild(btnPlayerOForfeit);
+        divContents.appendChild(divPlayerO);
+    article.appendChild(divContents);
 }
 
 // Adds a Mark to the Board
@@ -405,8 +487,8 @@ function playerWins(symbol) {
     symbol === 'X' ? gameState.xWins += 1: gameState.oWins += 1;
 }
 
-renderHome();
-// renderGame();
+// renderHome();
+renderGame();
 
 
 
