@@ -155,7 +155,34 @@ const gameState = (() => {
 //Factory - Player Object Constructor
 // IN > OUT: String String-URL-Num String String-Human-Computer String > Object
 const playerFactory = (symbol, avatar, name, type, filter, difficulty) => {
-    return {symbol, avatar, name, type, filter, difficulty};
+
+    const randomMove = () => {
+      // Rand Gen X 
+      // Rand Gen Y
+      // If (x, y) is filled
+        // Recurse
+      // else 
+        // Set player symbol at (x,y)
+      let x = Math.floor(Math.random() * 3);
+      let y = Math.floor(Math.random() * 3);
+      if(gameBoard.board[x][y] === '') {
+        gameBoard.board[x][y] = symbol;
+      } else if(gameBoard.board[y][x] === '') {
+        gameBoard.board[y][x] = symbol;
+      } else {
+        randomMove();
+      }
+    };
+
+    return {
+      symbol, 
+      avatar, 
+      name, 
+      type, 
+      filter, 
+      difficulty, 
+      randomMove,
+    };
 };
 
 let playerX = playerFactory('X', '1', 'Player X', 'HUMAN', '', 0);
@@ -472,21 +499,40 @@ function renderGame() {
                     // Game Loop That Updates Article
                     divSquare.addEventListener('click', () => {
                         addMarkToBoard(rowIndex,colIndex);
-                            // Check if Round Over
-                            checkRoundOver();
-                            
+                        // AI Logic
+                        if(playerX.type === 'AI' && gameState.xTurn) {
+                          if(playerX.difficulty === 1) {
+                            playerX.randomMove();
+                            gameState.xTurn = !gameState.xTurn;
+                          } else {
+                            // minMax algorithm
+                            // change gameState.xTurn
+                          }
+                        }
+                        if(playerO.type === 'AI' && !gameState.xTurn) {
+                          if(playerO.difficulty === 1) {
+                            playerO.randomMove();
+                            gameState.xTurn = !gameState.xTurn;
+                            console.log("toto")
+                          } else {
+                            // minMax algorithm
+                            // change gameState.xTurn
+                          }
+                        }
+                        // Check if Round Over
+                        checkRoundOver();
 
-                            // Do Something when Round Over
-                            if(gameState.roundOver) {
-                                clearArticle();
-                                renderGame();
-                                gameBoard.roundOverModal();
-                            } else {
-                              clearArticle();
-                              renderGame();
-                            }
+                        // Do Something when Round Over
+                        if(gameState.roundOver) {
+                            clearArticle();
+                            renderGame();
+                            gameBoard.roundOverModal();
+                        } else {
+                          clearArticle();
+                          renderGame();
+                        }
 
-                            console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
+                        console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
                     });
                     divGameBoard.appendChild(divSquare);
                 });
