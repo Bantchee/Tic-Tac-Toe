@@ -19,21 +19,13 @@ const gameBoard = (() => {
     }
     
     const gameOverModal = (player = undefined) => {
+        // clearRoundOverModal();
         // Div : Background Black 30% opacity
         const divBackground = document.createElement('div');
         divBackground.classList.add('game-over-background');
             // Div : Container
             const divContainer = document.createElement('div');
-            divContainer.classList.add('game-over-container')
-                // Span : Exit
-                const spanExit = document.createElement('span');
-                spanExit.classList.add('game-over-exit')
-                spanExit.textContent = 'X';
-                    // Click Eventlistiner => gameboard.clearGameOverModal()
-                    spanExit.addEventListener('click', () => {
-                        clearGameOverModal();
-                    });
-                divContainer.appendChild(spanExit);
+            divContainer.classList.add('game-over-container');
 
                 // Para : Text
                 const paraText = document.createElement('p');
@@ -92,7 +84,7 @@ const gameBoard = (() => {
         document.body.appendChild(divBackground);
     };
 
-    const clearroundOverModal = () => {
+    const clearRoundOverModal = () => {
       document.body.removeChild(document.querySelector('.background'));
     }
 
@@ -102,7 +94,7 @@ const gameBoard = (() => {
         divBackground.classList.add('background');
           // Div : Contents
           const divContent = document.createElement('div');
-          divContent.classList.add('round-cover-content');
+          divContent.classList.add('round-over-content');
             // Para : Player Winner
             const para = document.createElement('p');
             para.textContent = `${gameState.roundWinner.name} Wins Round ${gameState.currentRound}!`
@@ -115,7 +107,7 @@ const gameBoard = (() => {
                 gameState.currentRound += 1;
                 gameBoard.resetBoard();
                 gameState.roundOver = false;
-                clearroundOverModal();
+                clearRoundOverModal();
                 clearArticle();
                 renderGame();
               });
@@ -546,9 +538,10 @@ function renderGame() {
         divContents.appendChild(divPlayerO);
     article.appendChild(divContents);
 
-    if(gameState.currentRound >= 5 && ((gameState.xWins > gameState.oWins) || (gameState.oWins > gameState.xWins))) {
+    if(((gameState.xWins - gameState.oWins  > 1) && gameState.currentRound >= 5) || ((gameState.oWins - gameState.xWins  > 1) && gameState.currentRound >= 5)) {
         gameBoard.gameOverModal(gameState.xWins > gameState.oWins ? playerX : playerO);
-        console.log(cool);
+    } else if (gameState.xWins - gameState.oWins  > 2) {
+      gameBoard.gameOverModal(gameState.xWins > gameState.oWins ? playerX : playerO);
     }
 }
 
@@ -652,7 +645,7 @@ function checkRoundOver() {
 // In > Out : Character > Void
 function playerWins(symbol) {
   if(symbol === 'X') {
-    gameState.xWins;
+    gameState.xWins += 1;
     gameState.roundWinner = playerX;
   } else {
     gameState.oWins += 1;
