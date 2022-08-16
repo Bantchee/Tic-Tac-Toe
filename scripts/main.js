@@ -92,11 +92,37 @@ const gameBoard = (() => {
         document.body.appendChild(divBackground);
     };
 
-    const roundOverModal = () => {
+    const clearroundOverModal = () => {
+      document.body.removeChild(document.querySelector('.background'));
+    }
 
+    const roundOverModal = () => {
         // Div : Background
+        const divBackground = document.createElement('div');
+        divBackground.classList.add('background');
+          // Div : Contents
+          const divContent = document.createElement('div');
+          divContent.classList.add('round-cover-content');
             // Para : Player Winner
+            const para = document.createElement('p');
+            para.textContent = `${gameState.roundWinner.name} Wins Round ${gameState.currentRound}!`
+            divContent.appendChild(para);
             // Btn : Continue
+            const btnContinue = document.createElement('button');
+            btnContinue.textContent = "Continue";
+              // Event Listener
+              btnContinue.addEventListener('click', () => {
+                gameState.currentRound += 1;
+                gameBoard.resetBoard();
+                gameState.roundOver = false;
+                clearroundOverModal();
+                clearArticle();
+                renderGame();
+              });
+              divContent.appendChild(btnContinue);
+          divBackground.appendChild(divContent);
+        document.body.appendChild(divBackground);
+
         gameBoard.resetBoard();
     }
 
@@ -107,6 +133,7 @@ const gameBoard = (() => {
         ['', '', '']],
         resetBoard,
         gameOverModal,
+        roundOverModal,
     }
 })();
 
@@ -119,6 +146,7 @@ const gameState = (() => {
         gameState.xWins = 0;
         gameState.oWins = 0;
         gameState.roundOver = false;
+        gameState.roundWinner = null;
     };
 
     return {
@@ -127,6 +155,7 @@ const gameState = (() => {
         xWins: 0, 
         oWins: 0,
         roundOver: false,
+        roundWinner: null,
         reset,
     };
 })();
@@ -453,16 +482,19 @@ function renderGame() {
                         addMarkToBoard(rowIndex,colIndex);
                             // Check if Round Over
                             checkRoundOver();
+                            
 
                             // Do Something when Round Over
                             if(gameState.roundOver) {
-                                gameState.currentRound += 1;
-                                gameBoard.resetBoard();
-                                gameState.roundOver = false;
+                                clearArticle();
+                                renderGame();
+                                gameBoard.roundOverModal();
+                            } else {
+                              clearArticle();
+                              renderGame();
                             }
+
                             console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
-                        clearArticle();
-                        renderGame();
                     });
                     divGameBoard.appendChild(divSquare);
                 });
@@ -619,11 +651,18 @@ function checkRoundOver() {
 // Increase the Win score of a player by 1
 // In > Out : Character > Void
 function playerWins(symbol) {
-    symbol === 'X' ? gameState.xWins += 1: gameState.oWins += 1;
+  if(symbol === 'X') {
+    gameState.xWins;
+    gameState.roundWinner = playerX;
+  } else {
+    gameState.oWins += 1;
+    gameState.roundWinner = playerO;
+  }
+    
 }
 
-renderHome();
-// renderGame();
+// renderHome();
+renderGame();
 
 
 
