@@ -18,7 +18,7 @@ const gameBoard = (() => {
         document.body.removeChild(document.querySelector('.game-over-background'));
     }
     
-    const gameOverModal = () => {
+    const gameOverModal = (player = undefined) => {
         // Div : Background Black 30% opacity
         const divBackground = document.createElement('div');
         divBackground.classList.add('game-over-background');
@@ -34,6 +34,27 @@ const gameBoard = (() => {
                         clearGameOverModal();
                     });
                 divContainer.appendChild(spanExit);
+
+                // Para : Text
+                const paraText = document.createElement('p');
+                if (player.symbol === 'X') {
+                    if(gameState.currentRound >= 5) {
+                        // Player X Wins
+                        paraText.textContent = "Player X Wins!";
+                    } else {
+                        // Player X Forfeits
+                        paraText.textContent = "Player O Wins!";
+                    }
+                }  else if (player.symbol === 'O') {
+                    if(gameState.currentRound >= 5) {
+                        // Player O Wins
+                        paraText.textContent = "Player X Wins!";
+                    } else {
+                        // Player O Forfeits
+                        paraText.textContent = "Player X Wins!";
+                    }
+                }
+                divContainer.appendChild(paraText);
 
                 // Btn Div
                 const divBtns = document.createElement('div');
@@ -59,7 +80,6 @@ const gameBoard = (() => {
                     btnNewGame.textContent = 'New Game';
                         // Click Eventlistiner =>
                         btnNewGame.addEventListener('click', () => {
-                            
                             gameState.reset();
                             gameBoard.resetBoard();
                             clearGameOverModal();
@@ -71,6 +91,14 @@ const gameBoard = (() => {
             divBackground.appendChild(divContainer);
         document.body.appendChild(divBackground);
     };
+
+    const roundOverModal = () => {
+
+        // Div : Background
+            // Para : Player Winner
+            // Btn : Continue
+        gameBoard.resetBoard();
+    }
 
     return {
         board:[
@@ -391,7 +419,7 @@ function renderGame() {
             btnPlayerXForfeit.classList.add('forfeit');
             btnPlayerXForfeit.textContent = 'Forfeit';
             btnPlayerXForfeit.addEventListener('click', () => {
-                gameBoard.gameOverModal();
+                gameBoard.gameOverModal(playerX);
               });
             divPlayerX.appendChild(btnPlayerXForfeit);
 
@@ -480,11 +508,16 @@ function renderGame() {
                   btnPlayerOForfeit.classList.add('forfeit');
                   btnPlayerOForfeit.textContent = 'Forfeit';
                   btnPlayerOForfeit.addEventListener('click', () => {
-                    gameBoard.gameOverModal();
+                    gameBoard.gameOverModal(playerO);
                   });
                   divPlayerO.appendChild(btnPlayerOForfeit);
         divContents.appendChild(divPlayerO);
     article.appendChild(divContents);
+
+    if(gameState.currentRound >= 5 && ((gameState.xWins > gameState.oWins) || (gameState.oWins > gameState.xWins))) {
+        gameBoard.gameOverModal(gameState.xWins > gameState.oWins ? playerX : playerO);
+        console.log(cool);
+    }
 }
 
 // Adds a Mark to the Board
