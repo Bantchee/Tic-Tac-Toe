@@ -654,8 +654,8 @@ function playerWins(symbol) {
     
 }
 
-// renderHome();
-renderGame();
+renderHome();
+// renderGame();
 
 
 
