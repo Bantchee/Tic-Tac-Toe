@@ -40,18 +40,18 @@ const gameBoard = (() => {
                 if (player.symbol === 'X') {
                     if(gameState.currentRound >= 5) {
                         // Player X Wins
-                        paraText.textContent = "Player X Wins!";
+                        paraText.textContent = `${playerX.name} Wins!`;
                     } else {
                         // Player X Forfeits
-                        paraText.textContent = "Player O Wins!";
+                        paraText.textContent = `${playerO.name} Wins!`;
                     }
                 }  else if (player.symbol === 'O') {
                     if(gameState.currentRound >= 5) {
                         // Player O Wins
-                        paraText.textContent = "Player X Wins!";
+                        paraText.textContent = `${playerO.name} Wins!`;
                     } else {
                         // Player O Forfeits
-                        paraText.textContent = "Player X Wins!";
+                        paraText.textContent = `${playerX.name} Wins!`;
                     }
                 }
                 divContainer.appendChild(paraText);
@@ -137,8 +137,8 @@ const playerFactory = (symbol, avatar, name, type, filter, difficulty) => {
     return {symbol, avatar, name, type, filter, difficulty};
 };
 
-let playerX = playerFactory('X', '1', 'Default X', 'HUMAN', '', 0);
-let playerO = playerFactory('O', '1', 'Default O', 'AI', '', 1);
+let playerX = playerFactory('X', '1', 'Player X', 'HUMAN', '', 0);
+let playerO = playerFactory('O', '1', 'Player O', 'AI', '', 1);
 
 // Renders home page
 function renderHome() {
