@@ -499,26 +499,7 @@ function renderGame() {
                     // Game Loop That Updates Article
                     divSquare.addEventListener('click', () => {
                         addMarkToBoard(rowIndex,colIndex);
-                        // AI Logic
-                        if(playerX.type === 'AI' && gameState.xTurn) {
-                          if(playerX.difficulty === 1) {
-                            playerX.randomMove();
-                            gameState.xTurn = !gameState.xTurn;
-                          } else {
-                            // minMax algorithm
-                            // change gameState.xTurn
-                          }
-                        }
-                        if(playerO.type === 'AI' && !gameState.xTurn) {
-                          if(playerO.difficulty === 1) {
-                            playerO.randomMove();
-                            gameState.xTurn = !gameState.xTurn;
-                            console.log("toto")
-                          } else {
-                            // minMax algorithm
-                            // change gameState.xTurn
-                          }
-                        }
+                       
                         // Check if Round Over
                         checkRoundOver();
 
@@ -589,7 +570,61 @@ function renderGame() {
     } else if (gameState.xWins - gameState.oWins  > 2) {
       gameBoard.gameOverModal(gameState.xWins > gameState.oWins ? playerX : playerO);
     }
+
+    // AI Logic
+    // if(playerX.type === 'AI' && gameState.xTurn) {
+    //   if(playerX.difficulty === 1) {
+    //     // Check if Round Over
+    //     checkRoundOver();
+
+    //     // Do Something when Round Over
+    //     if(gameState.roundOver) {
+    //         clearArticle();
+    //         renderGame();
+    //         gameBoard.roundOverModal();
+    //         console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
+    //     } else {
+    //       // Player X Move
+    //       playerX.randomMove();
+    //       gameState.xTurn = !gameState.xTurn;
+    //       clearArticle();
+    //       renderGame();
+    //     }
+
+
+    //   } else {
+    //     // minMax algorithm
+    //     // change gameState.xTurn
+    //   }
+    // }
+
+    // if(playerO.type === 'AI' && !gameState.xTurn) {
+    //   if(playerO.difficulty === 1) {
+    //     // Check if Round Over
+    //     checkRoundOver();
+
+    //     // Do Something when Round Over
+    //     if(gameState.roundOver) {
+    //       clearArticle();
+    //       renderGame();
+    //       gameBoard.roundOverModal();
+    //       console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
+    //   } else {
+    //     // Player O Move
+    //     playerO.randomMove();
+    //     gameState.xTurn = !gameState.xTurn;
+
+    //     clearArticle();
+    //     renderGame();
+    //   } 
+    //   } else {
+    //     // minMax algorithm
+    //     // change gameState.xTurn
+    //   }
+    // }
 }
+
+ 
 
 // Adds a Mark to the Board
 // In > Out : Num Num > Undefined
