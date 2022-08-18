@@ -69,9 +69,10 @@ const createHomePlayer = (state) => ({
             // P : Player Symbol + Player Name
             // Div : Player Customizer Container
                 // Btn : Avatr Picker
-                // Input : Name
-                // Input : Human, Easy AI, Normal AI, Hard AI
-                // Input : Color Picker
+                // Div : Inputs
+                    // Input : Name
+                    // Input : Human, Easy AI, Normal AI, Hard AI
+                    // Input : Color Picker
     },
 });
 
@@ -95,4 +96,8 @@ const createVs = (state) => ({
         // Div Player O
     // Btn Play
 
-
+const testPrivateFunc = (state) => ({
+    testPrivateFunc: (num) => {
+        console.log(num);
+    },
+});
