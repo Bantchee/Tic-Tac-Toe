@@ -1,6 +1,6 @@
 // Module
 const homePage = (() => {
-    const publicState = {
+    const state = {
         page: null,
         container: null,
         playerX: null,
@@ -9,55 +9,76 @@ const homePage = (() => {
         playBtn: null,
     };
 
-    // Need private funcions for getting private state
-    const privateState = Object.assign(
-        {
-            privateProperty: "I'm a private property",
-        }, 
-        publicState,
+    const public = Object.assign(
+        {state},
+        getter(state),
+        setter(state),
+        render(state),
+        createPage(state),
+        createHomeContainer(state),
+        createPlayBtn(state),
+        createHomePlayer(state),
+        createVs(state),
     );
 
     const private = Object.assign(
-        {privateState},
-        testPrivateFunc(privateState),
+        testPrivateFunc(state),
     );
 
-    const public = Object.assign(
-        {publicState},
-        getter(publicState),
-        setter(publicState),
-        render(privateState),
-        createPage(privateState),
-        createHomeContainer(privateState),
-        createPlayBtn(privateState),
-        createHomePlayer(privateState),
-        createVs(privateState),
-    );
-
-    console.log(private.privateState.privateProperty);
-    console.log(private.privateState);
+    console.log(private);
 
     private.testPrivateFunc(5);
 
     return public;
-
-    // return Object.assign(
-    //     {state},
-    //     getter(state),
-    //     setter(state),
-    //     render(state),
-    //     createPage(state),
-    //     createHomeContainer(state),
-    //     createPlayBtn(state),
-    //     createHomePlayer(state),
-    //     createVs(state),
-    // );
 })();
 
 
-// Module / Factory Declaration
-    // publicState
-    // privateState = publicState + privateStates
-    // Public = publicState + publicFuncs(privateState)
-    // Private = Public + privateState + privateFuncs(privateState)
+// // Module / Factory Declaration
+//     // publicState
+//     // privateState = publicState + privateStates
+//     // Public = publicState + publicFuncs(privateState)
+//     // Private = Public + privateState + privateFuncs(privateState)
+
+// // Module
+// const homePage = (() => {
+//     const state = {
+//         page: null,
+//         container: null,
+//         playerX: null,
+//         vs: null,
+//         PlayerO: null,
+//         playBtn: null,
+//     };
+
+//     const privateState = Object.assign(
+//         {
+//             privateProperty: "I'm a private property",
+//         }, 
+//         state,
+//     );
+
+//     const private = Object.assign(
+//         {privateState},
+//         testPrivateFunc(privateState),
+//     );
+
+//     const public = Object.assign(
+//         {state},
+//         getter(state),
+//         setter(state),
+//         render(privateState),
+//         createPage(privateState),
+//         createHomeContainer(privateState),
+//         createPlayBtn(privateState),
+//         createHomePlayer(privateState),
+//         createVs(privateState),
+//     );
+
+//     console.log(private.privateState.privateProperty);
+//     console.log(private.privateState);
+
+//     private.testPrivateFunc(5);
+
+//     return public;
+// })();
     
