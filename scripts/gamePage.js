@@ -1,5 +1,7 @@
+// Module
 const gamePage = (() => {
     let state = {
+        page: null,
         board: [
             ['', '', ''],
             ['', '', ''],
@@ -12,6 +14,8 @@ const gamePage = (() => {
         roundOver: false,
         roundWinner: null,
         gameWinnder: null,
+        playerX : Player('x', 'human', 'Player X', '', ''),
+        playerO : Player('o', 'human', 'Player O', '', ''),
     }
 
     const resetBoard = () => {
@@ -22,27 +26,11 @@ const gamePage = (() => {
         ];
     };
 
-    const renderGame = () => {
-        // Remove First Child of ArticleElement
-        // Which is Div.game
-        gamePage.articleElement.firstChild.remove();
-
-        // Render Components of Game Page
-    };
-
-    const addRoundComponent = () => {
-
-    };
-
-    const addBoardComponent = () => {
-
-    };
-
-    const addPlayerComponents = () => {
-
-    };
-
     return Object.assign(
         {state},
+        getter(state),
+        setter(state),
+        render(state),
+        createPage(state)
     )
 })();

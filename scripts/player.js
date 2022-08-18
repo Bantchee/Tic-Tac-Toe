@@ -1,19 +1,23 @@
-const Player = (symbol, name, avatar, avatarFilter) => {
+// Factory
+const Player = (symbol, type, name, avatar, avatarFilter) => {
     let state = {
         symbol,
+        type,
         name,
         avatar,
         avatarFilter,
     };
 
     return Object.assign(
-        {state}
+        {state},
     );
 };
 
-const AIPlayer = (symbol, name, avatar, avatarFilter, difficulty) => {
+// Factory
+const AIPlayer = (symbol, type, name, avatar, avatarFilter, difficulty) => {
     let state = {
         symbol,
+        type,
         name,
         avatar,
         avatarFilter,
