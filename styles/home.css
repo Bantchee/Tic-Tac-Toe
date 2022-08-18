@@ -118,6 +118,6 @@
     align-self: center;
 }
 
-#home-page button {
+#home-page button:hover {
     background-color: #ccc;
 }
