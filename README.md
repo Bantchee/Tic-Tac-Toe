@@ -22,6 +22,13 @@ A Tic Tac Toe Game. This is a project from [The Odin Project](<https://www.theod
     * Round Indicator
     * Player Round Wins Indicator
     * Player Forfiet Buttons
+## Concepts Learned
+* MinMax Algorithm
+* Game Loops
+* Modules
+* Factories
+* Composition
+* Private Object Functions
 
 ## Tools
 * HTML
