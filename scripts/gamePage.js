@@ -7,6 +7,7 @@ const gamePage = (() => {
             ['', '', ''],
             ['', '', ''],
         ],
+        avatarArr: [1, 2],
         currentRound: 1,
         xTurn: true,
         xWins: 0, 
@@ -14,9 +15,16 @@ const gamePage = (() => {
         roundOver: false,
         roundWinner: null,
         gameWinnder: null,
-        playerX : Player('x', 'human', 'Player X', '', ''),
-        playerO : Player('o', 'human', 'Player O', '', ''),
+        playerX : Player('x', 'human', 'Player X', '1', '', '0'),
+        playerO : Player('o', 'AI', 'Player O', '1', '', '1'),
     }
+
+    const public = Object.assign(
+        getter(state),
+        setter(state),
+        render(state),
+        createPage(state),
+    );
 
     const resetBoard = () => {
         gamePage.board =[
@@ -26,11 +34,7 @@ const gamePage = (() => {
         ];
     };
 
-    return Object.assign(
-        {state},
-        getter(state),
-        setter(state),
-        render(state),
-        createPage(state)
-    )
+    state.page = public.createPage('game-page');
+
+    return public
 })();

@@ -52,6 +52,11 @@
     border: 5px solid black;
     border-radius: 10px;
     cursor: pointer;
+
+    width: 100px;
+    height: 100px;
+
+    padding: 10px;
 }
 
 #home-page .container .player .player-boarder .avatar-btn:hover {
@@ -59,8 +64,8 @@
 }
 
 #home-page .container .player .player-boarder .avatar-btn img {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 100%;
 }
 
 #home-page .container .player .player-boarder .inputs {
