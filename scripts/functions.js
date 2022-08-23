@@ -117,6 +117,20 @@ const createHomePlayer = (state) => ({
                     inputName.setAttribute('placeholder', 'Name');
                     divInputs.appendChild(inputName);
 
+                    // Event Listner 
+                    inputName.addEventListener('focusout', () => {
+                        player.set('name', inputName.value);
+                        homePage.render('home-page');
+                        homePage.update('home-page');
+                    });
+                    inputName.addEventListener('keydown', (event) => {
+                        if(event.key === 'Enter') {
+                            player.set('name', inputName.value);
+                            homePage.render('home-page');
+                            homePage.update('home-page');
+                        }  
+                    });
+
                     // Input : Human, Easy AI, Hard AI
                     const selectHumanAI = document.createElement('select');
                     selectHumanAI.setAttribute('type', 'selector');
