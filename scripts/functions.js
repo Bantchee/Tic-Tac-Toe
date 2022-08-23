@@ -21,6 +21,12 @@ const render = (state) => ({
 
         // Create Children
         if(id === 'game-page') {
+            state['page'] = gamePage.createPage(id);
+            state['roundElement'] = gamePage.createRoundElement();
+            state['containerElement'] = gamePage.createGameContainer();
+            state['playerXElement'] = gamePage.createGamePlayerElement(gamePage.get('playerX'));
+            // state['boardElement'] = gamePage.createBoardElement();
+            state['playerOElement'] = gamePage.createGamePlayerElement(gamePage.get('playerO'));
             
         } else if(id === 'home-page') {
             state['page'] = homePage.createPage(id);
@@ -45,9 +51,7 @@ const update = (state) => ({
         } else if(id === 'home-page') {
             // Binding DOM Elements
             state['playerX'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerX'));
-            // state.playerX.querySelector('.inputs').addEventListener('click', () => public.playGame());
             state['playerO'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerO'));
-            // state.playerO.querySelector('.inputs').addEventListener('click', () => public.playGame());
             state['playBtn'].addEventListener('click', () => homePage.playGame());
         }
     },
@@ -237,7 +241,7 @@ const testPrivateFunc = (state) => ({
 // When play btn on homePage is clicked load gamePage
 const playGame = (state) => ({
     playGame: () => {
-        gamePage.render();
+        gamePage.render('game-page');
     },
 });
 
@@ -289,7 +293,6 @@ const populateModal = (state) => ({
                 // Add Current-avatar class
                 if(gamePage.get(value).get('avatar') === i) {
                     ava.classList.add('current-avatar');
-                    console.log('cool');
                 }
             });
         }
@@ -305,7 +308,6 @@ function changeSvgColor(event) {
     
     if(event.target.classList.contains('x-color')) {
         img = document.querySelector('.x-img');
-        console.log(img);
         gamePage.get('playerX').set('filter', result.filter);
     } else {
         img = document.querySelector('.o-img');
@@ -314,3 +316,79 @@ function changeSvgColor(event) {
 
     img.style = result.filter;
 }
+
+const createGameContainer = (state) => ({
+    createGameContainer: () => {
+        console.log('dsfasdfsdf');
+        let container = document.createElement('div');
+        container.classList.add('container')
+        state['page'].appendChild(container);
+        return container;
+    }
+});
+
+const createRoundElement = (state) => ({
+    createRoundElement: () => {
+        let round = document.createElement('p');
+        round.textContent = 'Round: ' + state['currentRound'];
+        round.classList.add('current-round')
+        state['page'].appendChild(round);
+        return round;
+    },
+});
+
+const createGamePlayerElement = (state) => ({
+    createGamePlayerElement: (player) => {
+        // Div : Player
+        const divPlayer = document.createElement('div');
+        divPlayer.classList.add('div-player', `div-player-${player.get('symbol')}`);
+        state['containerElement'].appendChild(divPlayer);
+
+            // Img : Turn Indicator SVG
+            const imgPlayerTurnIndicator = document.createElement('img');
+            imgPlayerTurnIndicator.classList.add('turn-indicator');
+            if(gamePage.get('xTurn')) {
+                if(player.get('symbol') === 'x') {
+                    imgPlayerTurnIndicator.classList.remove('hidden');
+                } else {
+                    imgPlayerTurnIndicator.classList.add('hidden');
+                }
+              } else {
+                if(player.get('symbol') === 'x') {
+                    imgPlayerTurnIndicator.classList.add('hidden');
+                } else {
+                    imgPlayerTurnIndicator.classList.remove('hidden');
+                }
+              }
+            imgPlayerTurnIndicator.setAttribute('src', './icons/turn_indicator.svg');
+            divPlayer.appendChild(imgPlayerTurnIndicator);
+
+            // Para : Player Name
+            const paraPlayerName = document.createElement('p');
+            paraPlayerName.classList.add('player-name');
+            paraPlayerName.textContent = player.get('name');
+            divPlayer.appendChild(paraPlayerName);
+
+            // Img : Player Avatar SVG
+            const imgPlayerAvatar = document.createElement('img');
+            imgPlayerAvatar.classList.add('player-x-avatar', 'avatar-img');
+            imgPlayerAvatar.style = player.get('filter');
+            imgPlayerAvatar.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
+            divPlayer.appendChild(imgPlayerAvatar);
+
+            // Para : Player X Wins
+            const paraPlayerWins = document.createElement('p');
+            paraPlayerWins.classList.add('player-wins');
+            paraPlayerWins.textContent = gamePage.get('xWins');
+            divPlayer.appendChild(paraPlayerWins);
+
+            // Btn : Forfeit
+            const btnPlayerForfeit = document.createElement('button');
+            btnPlayerForfeit.classList.add('forfeit');
+            btnPlayerForfeit.textContent = 'Forfeit';
+            // btnPlayerForfeit.addEventListener('click', () => {
+            //     gameBoard.gameOverModal(player);
+            //   });
+            divPlayer.appendChild(btnPlayerForfeit);
+    },
+});

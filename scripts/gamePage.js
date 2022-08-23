@@ -2,6 +2,7 @@
 const gamePage = (() => {
     let state = {
         page: null,
+        containerElement: null,
         board: [
             ['', '', ''],
             ['', '', ''],
@@ -23,7 +24,11 @@ const gamePage = (() => {
         getter(state),
         setter(state),
         render(state),
+        update(state),
         createPage(state),
+        createGameContainer(state),
+        createRoundElement(state),
+        createGamePlayerElement(state),
     );
 
     const resetBoard = () => {

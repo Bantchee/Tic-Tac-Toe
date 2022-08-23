@@ -1,58 +1,58 @@
-.game-article {
+#game-page {
     display: grid;
     grid-template-rows: 1fr 5fr;
     justify-items: center;
 }
 
-.game-article .current-round {
+#game-page .current-round {
     padding: 0px;
     margin: 0px;
     font-size: 30px;
     font-weight: bold;
 }
 
-.game-article .contents {
+#game-page .container {
     /* justify-self: center; */
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     /* width: 60%; */
 }
 
-.game-article .contents .avatar-img {
+#game-page .container .avatar-img {
     width: 100px;
     height: 100px;
 }
 
-.game-article .contents .turn-indicator {
+#game-page .container .turn-indicator {
     width: 50px;
     height: 50px;
 }
 
-.game-article .contents .hidden {
+#game-page .container .hidden {
     visibility: hidden;
 }
 
-.game-article .contents .div-player {
+#game-page .container .div-player {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.game-article .contents .player-wins {
+#game-page .container .player-wins {
     font-size: 30px;
     font-weight: bold;
     padding: 0px;
     margin: 16px 0px;
 }
 
-.game-article .contents .player-name {
+#game-page .container .player-name {
     margin: 16px 0px;
     padding: 0px;
     font-size: 30px;
     font-weight: bold;
 }
 
-.game-article .contents .forfeit {
+#game-page .container .forfeit {
     font-size: 30px;
     font-weight: bold;
     padding: 10px;
@@ -62,7 +62,7 @@
     cursor: pointer;
 }
 
-.game-article .game-board {
+#game-page .game-board {
     display: grid;
     grid: Board;
     width: 350px;
@@ -74,18 +74,18 @@
     border-radius: 5px;
 }
 
-.game-article .game-board .square {
+#game-page .game-board .square {
     background-color: White;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.game-article .game-board .square:hover {
+#game-page .game-board .square:hover {
     background-color: #ccc;
 }
 
-.game-article .game-board .square .symbol {
+#game-page .game-board .square .symbol {
     width: 50%;
     height: 50%;
     padding: 0px;

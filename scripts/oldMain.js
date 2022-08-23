@@ -427,7 +427,6 @@ function renderGame() {
     const divContents = document.createElement('div');
     divContents.classList.add('contents');
 
-
         // Player X
         const divPlayerX = document.createElement('div');
         divPlayerX.classList.add('div-player');
