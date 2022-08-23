@@ -15,8 +15,8 @@ const gamePage = (() => {
         roundOver: false,
         roundWinner: null,
         gameWinnder: null,
-        playerX : Player('x', 'human', 'Player X', '1', '', '0'),
-        playerO : Player('o', 'AI', 'Player O', '1', '', '1'),
+        playerX : Player('x', 'human', 'Player X', 1, '', 0),
+        playerO : Player('o', 'AI', 'Player O', 1, '', 1),
     }
 
     const public = Object.assign(

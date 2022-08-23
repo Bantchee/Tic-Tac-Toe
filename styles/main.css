@@ -37,7 +37,13 @@ header h1 {
 
 article {
     grid-area: "article";
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+
 /* Footer */
 footer {
     grid-area: "footer";

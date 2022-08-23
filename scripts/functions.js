@@ -20,19 +20,36 @@ const render = (state) => ({
         }
 
         // Create Children
-        // if(id === 'game-page') {
+        if(id === 'game-page') {
             
-        // } else if(id === 'home-page') {
-        //     state['page'] = homePage.createPage(id);
-        //     state['container'] = homePage.createHomeContainer();
-        //     state['playerX'] = homePage.createHomePlayer(gamePage.get('playerX'));
-        //     state['vs'] = homePage.createVs();
-        //     state['PlayerO'] = homePage.createHomePlayer(gamePage.get('playerO'));
-        //     state['playBtn'] = homePage.createPlayBtn();
-        // }
+        } else if(id === 'home-page') {
+            state['page'] = homePage.createPage(id);
+            state['container'] = homePage.createHomeContainer();
+            state['playerX'] = homePage.createHomePlayer(gamePage.get('playerX'));
+            state['vs'] = homePage.createVs();
+            state['playerO'] = homePage.createHomePlayer(gamePage.get('playerO'));
+            state['playBtn'] = homePage.createPlayBtn();
+            state['modal'] = homePage.createModal();
+        }
 
         // add page
         article.appendChild(state['page']);
+    },
+});
+
+// Update Elements on screen
+const update = (state) => ({
+    update: (id) => {
+        if(id === 'game-page') {
+            
+        } else if(id === 'home-page') {
+            // Binding DOM Elements
+            state['playerX'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerX'));
+            // state.playerX.querySelector('.inputs').addEventListener('click', () => public.playGame());
+            state['playerO'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerO'));
+            // state.playerO.querySelector('.inputs').addEventListener('click', () => public.playGame());
+            state['playBtn'].addEventListener('click', () => homePage.playGame());
+        }
     },
 });
 
@@ -66,7 +83,7 @@ const createHomePlayer = (state) => ({
     createHomePlayer: (player) => {
         // Div : Player Container
         const divPlayer = document.createElement('div');
-        divPlayer.classList.add(`player`, 'player-' + player.symbol);
+        divPlayer.classList.add(`player`, 'player-' + player.get('symbol'));
         state['container'].appendChild(divPlayer);
 
             // P : Player Symbol + Player Name
@@ -108,43 +125,57 @@ const createHomePlayer = (state) => ({
                         // First Option : Human
                         const firstOption = document.createElement('option');
                         if (player.get('type') === 'AI') {
-                            firstOption.setAttribute('value', (player.get('difficulty') === '1' ? "Easy " : "Hard ") + player.get('type'));
-                            firstOption.textContent = (player.get('difficulty') === '1' ? "Easy " : "Hard ") + player.get('type');
+                            firstOption.setAttribute('value', (player.get('difficulty') === 1 ? "Easy " : "Hard ") + player.get('type'));
+                            firstOption.textContent = (player.get('difficulty') === 1 ? "Easy " : "Hard ") + player.get('type');
                         } else {
                             firstOption.setAttribute('value', player.get('type'));
                             firstOption.textContent = player.get('type');
                         }
                         selectHumanAI.appendChild(firstOption);
 
+                        // Eventlistner
+                        firstOption.addEventListener('click', () => {
+                            player.set('type', firstOption.textContent.includes('Human') ? 'HUMAN' : 'AI');
+                            player.set('difficulty', firstOption.textContent.includes('Easy') ? 1 : 2);
+                            homePage.render('home-page');
+                            homePage.update('home-page');
+                        });
+
                         // Second Option : Easy AI
                         const secondOption = document.createElement('option');
                         if (player.get('type') === 'AI') {
-                            // secondOption.setAttribute('value', 'Human');
-                            // secondOption.textContent = "Human";
-
                             secondOption.setAttribute('value', (player.get('difficulty') === 1 ? "Hard " : "Easy ") + player.get('type'));
                             secondOption.textContent = (player.get('difficulty') === 1 ? "Hard " : "Easy ") + player.get('type');
                         } else {
                             secondOption.setAttribute('value', 'Easy AI');
                             secondOption.textContent = 'Easy AI';
                         }
-                        
                         selectHumanAI.appendChild(secondOption);
+                        // Eventlistner
+                        secondOption.addEventListener('click', () => {
+                            player.set('type', secondOption.textContent.includes('Human') ? 'HUMAN' : 'AI');
+                            player.set('difficulty', secondOption.textContent.includes('Easy') ? 1 : 2);
+                            homePage.render('home-page');
+                            homePage.update('home-page');
+                        });
 
                         // Third Option : Hard AI
                         const thirdOption = document.createElement('option');
                         if (player.get('type')=== 'AI') {
-                            // thirdOption.setAttribute('value', (player.difficulty === 1 ? "Hard " : "Easy ") + player.type);
-                            // thirdOption.textContent = (player.difficulty === 1 ? "Hard " : "Easy ") + player.type;
-
                             thirdOption.setAttribute('value', 'Human');
                             thirdOption.textContent = "Human";
                         } else {
                             thirdOption.setAttribute('value', 'Hard AI');
                             thirdOption.textContent = 'Hard AI';
                         }
-
                         selectHumanAI.appendChild(thirdOption);
+                        // Eventlistner
+                        thirdOption.addEventListener('click', () => {
+                            player.set('type', thirdOption.textContent.includes('Human') ? 'HUMAN' : 'AI');
+                            player.set('difficulty', thirdOption.textContent.includes('Easy') ? 1 : 2);
+                            homePage.render('home-page');
+                            homePage.update('home-page');
+                        });
 
                     // Div : Color Wheel Picker
                     const divColor = document.createElement('divColor');
@@ -156,6 +187,9 @@ const createHomePlayer = (state) => ({
                         inputColorPicker.classList.add(player.get('symbol') === 'X' ? 'x-color' : 'o-color');
                         inputColorPicker.setAttribute('type', 'color');
                         divColor.appendChild(inputColorPicker);
+
+                        // Event Listner
+                        // inputColorPicker.addEventListener('change', changeSvgColor, false);
 
                         // Label : Color
                         const labelColorPicker = document.createElement('label');
@@ -220,27 +254,29 @@ const toggleModal = (state) => ({
 const populateModal = (state) => ({
     populateModal: (value) => {
         let modal = state['modal'];
-        switch(value) {
-            case 'avatar-x':
-                let contents = modal.querySelector('.contents');
-                contents.classList.add('avatar-modal');
-                gamePage.get('avatarArr').forEach((i) => {
-                    const ava = document.createElement('img');
-                    ava.setAttribute('src', `./icons/${gamePage.get('playerX').get('type').toLowerCase() + '_' + gamePage.get('playerX').get('symbol').toLowerCase() + i}.svg`);
-                    contents.appendChild(ava);
-                    // Event Listner
-                    // ava.addEventListener('click', () => {
-                    //     player.avatar = value;
-                    //     document.body.removeChild(background);
-                    //     clearArticle();
-                    //     renderHome();
-                    // });
+        if(value === 'playerX' || value === 'playerO') {
+            let contents = modal.querySelector('.contents');
+            contents.classList.add('avatar-modal');
+            gamePage.get('avatarArr').forEach((i) => {
+                const ava = document.createElement('img');
+                ava.setAttribute('src', `./icons/${gamePage.get(value).get('type').toLowerCase() + '_' + gamePage.get(value).get('symbol').toLowerCase() + i}.svg`);
+                contents.appendChild(ava);
+                
+                // Event Listner
+                ava.addEventListener('click', () => {
+                    gamePage.get(value).set('avatar', i);
+                    modal.classList.toggle('hidden');
+                    document.body.removeChild(modal);
+                    homePage.render('home-page');
+                    homePage.update('home-page');
+                });
 
                 // Add Current-avatar class
-                if(gamePage.get('playerX').get('avatar') == value) {
+                if(gamePage.get(value).get('avatar') === i) {
                     ava.classList.add('current-avatar');
+                    console.log('cool');
                 }
-                });
+            });
         }
     }
 });

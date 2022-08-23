@@ -1,1 +1,2 @@
-homePage.render();
+homePage.render('home-page');
+homePage.update('home-page');
