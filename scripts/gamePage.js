@@ -2,7 +2,11 @@
 const gamePage = (() => {
     let state = {
         page: null,
+        roundElement: null,
         containerElement: null,
+        playerXElement: null,
+        boardElement: null,
+        playerOElement: null,
         board: [
             ['', '', ''],
             ['', '', ''],
@@ -29,6 +33,7 @@ const gamePage = (() => {
         createGameContainer(state),
         createRoundElement(state),
         createGamePlayerElement(state),
+        createBoardElement(state),
     );
 
     const resetBoard = () => {

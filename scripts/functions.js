@@ -25,7 +25,7 @@ const render = (state) => ({
             state['roundElement'] = gamePage.createRoundElement();
             state['containerElement'] = gamePage.createGameContainer();
             state['playerXElement'] = gamePage.createGamePlayerElement(gamePage.get('playerX'));
-            // state['boardElement'] = gamePage.createBoardElement();
+            state['boardElement'] = gamePage.createBoardElement();
             state['playerOElement'] = gamePage.createGamePlayerElement(gamePage.get('playerO'));
             
         } else if(id === 'home-page') {
@@ -319,7 +319,6 @@ function changeSvgColor(event) {
 
 const createGameContainer = (state) => ({
     createGameContainer: () => {
-        console.log('dsfasdfsdf');
         let container = document.createElement('div');
         container.classList.add('container')
         state['page'].appendChild(container);
@@ -390,5 +389,57 @@ const createGamePlayerElement = (state) => ({
             //     gameBoard.gameOverModal(player);
             //   });
             divPlayer.appendChild(btnPlayerForfeit);
+    },
+});
+
+const createBoardElement = (state) => ({
+    createBoardElement: () => {
+        // Div : Board Container
+        const divGameBoard = document.createElement('div');
+        divGameBoard.classList.add('game-board');
+        state['containerElement'].appendChild(divGameBoard);
+
+        // Use gameBoard object;
+            // 3 by 3 divs
+            gamePage.get('board').forEach((row, rowIndex) => {
+                row.forEach((squareValue, colIndex) => {
+                    const divSquare = document.createElement('div');
+                    divSquare.classList.add('square');
+                        if(squareValue !== '') {
+                            // Img : Symbol
+                            const imgSymbol = document.createElement('img');
+                            imgSymbol.classList.add('symbol');
+                            if(squareValue === 'X') {
+                                imgSymbol.setAttribute('src', './icons/x_symbol.svg');
+                                imgSymbol.style = gamePage.get('playerX').get('filter');
+                            } else if(squareValue === 'O') {
+                                imgSymbol.setAttribute('src', './icons/o_symbol.svg');
+                                imgSymbol.style = gamePage.get('playerO').get('filter');
+                            }
+                            divSquare.appendChild(imgSymbol);
+                        }
+
+                    // Game Loop That Updates Article
+                    // divSquare.addEventListener('click', () => {
+                    //     addMarkToBoard(rowIndex,colIndex);
+                       
+                    //     // Check if Round Over
+                    //     checkRoundOver();
+
+                    //     // Do Something when Round Over
+                    //     if(gameState.roundOver) {
+                    //         clearArticle();
+                    //         renderGame();
+                    //         gameBoard.roundOverModal();
+                    //     } else {
+                    //       clearArticle();
+                    //       renderGame();
+                    //     }
+
+                    //     console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
+                    // });
+                    divGameBoard.appendChild(divSquare);
+                });
+            });
     },
 });
