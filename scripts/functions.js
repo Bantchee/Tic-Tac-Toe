@@ -105,6 +105,7 @@ const createHomePlayer = (state) => ({
                     // Img
                     const avatarImg = document.createElement('img');
                     avatarImg.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
+                    avatarImg.classList.add(player.get('symbol') === 'x' ? 'x-img' : 'o-img');
                     btnAvatar.append(avatarImg);
                 
                 // Div : Inputs
@@ -198,12 +199,12 @@ const createHomePlayer = (state) => ({
 
                         // Input : Color Wheel Picker
                         const inputColorPicker = document.createElement('input');
-                        inputColorPicker.classList.add(player.get('symbol') === 'X' ? 'x-color' : 'o-color');
+                        inputColorPicker.classList.add(player.get('symbol') === 'x' ? 'x-color' : 'o-color');
                         inputColorPicker.setAttribute('type', 'color');
                         divColor.appendChild(inputColorPicker);
 
                         // Event Listner
-                        // inputColorPicker.addEventListener('change', changeSvgColor, false);
+                        inputColorPicker.addEventListener('change', changeSvgColor, false);
 
                         // Label : Color
                         const labelColorPicker = document.createElement('label');
@@ -294,3 +295,22 @@ const populateModal = (state) => ({
         }
     }
 });
+
+// Changes the color of SVG images
+function changeSvgColor(event) {
+    const rgb = hexToRgb(event.target.value);
+    const color = new Color(rgb[0], rgb[1], rgb[2]);
+    const solver = new Solver(color);
+    const result = solver.solve();
+    
+    if(event.target.classList.contains('x-color')) {
+        img = document.querySelector('.x-img');
+        console.log(img);
+        gamePage.get('playerX').set('filter', result.filter);
+    } else {
+        img = document.querySelector('.o-img');
+        gamePage.get('playerO').set('filter', result.filter);
+    }
+
+    img.style = result.filter;
+}
