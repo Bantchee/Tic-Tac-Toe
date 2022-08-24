@@ -34,6 +34,12 @@ const gamePage = (() => {
         createRoundElement(state),
         createGamePlayerElement(state),
         createBoardElement(state),
+        addMarkToBoard(state),
+        checkRoundOver(state),
+        playerWins(state),
+        createModal(state),
+        toggleModal(state),
+        populateModal(state),
     );
 
     const resetBoard = () => {

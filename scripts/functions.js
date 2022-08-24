@@ -38,6 +38,7 @@ const render = (state) => ({
             state['boardElement'] = gamePage.createBoardElement();
             state['playerOElement'] = gamePage.createGamePlayerElement(gamePage.get('playerO'));
             
+            
         } else if(id === 'home-page') {
             state['page'] = homePage.createPage(id);
             state['container'] = homePage.createHomeContainer();
@@ -45,7 +46,6 @@ const render = (state) => ({
             state['vs'] = homePage.createVs();
             state['playerO'] = homePage.createHomePlayer(gamePage.get('playerO'));
             state['playBtn'] = homePage.createPlayBtn();
-            state['modal'] = homePage.createModal();
         }
 
         // add page
@@ -60,8 +60,16 @@ const update = (state) => ({
             
         } else if(id === 'home-page') {
             // Binding DOM Elements
-            state['playerX'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerX'));
-            state['playerO'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerO'));
+            state['playerX'].querySelector('button').addEventListener('click', () => {
+                state['modal'] = homePage.createModal();
+                homePage.toggleModal();
+                homePage.populateModal('playerX');
+            });
+            state['playerO'].querySelector('button').addEventListener('click', () => {
+                state['modal'] = homePage.createModal();
+                homePage.toggleModal();
+                homePage.populateModal('playerO');
+            });
             state['playBtn'].addEventListener('click', () => homePage.playGame());
             state['playerX'].querySelector('.color-wheel').addEventListener('change', homePage.changeSvgColor, false);
             state['playerO'].querySelector('.color-wheel').addEventListener('change', homePage.changeSvgColor, false);
@@ -279,9 +287,8 @@ const createModal = (state) => ({
 
 // Switch statement for different modals?
 const toggleModal = (state) => ({
-    toggleModal: (value) => {
+    toggleModal: () => {
         let modal = state['modal'];
-        homePage.populateModal(value);
         modal.classList.toggle('hidden');
     }
 });
@@ -296,21 +303,32 @@ const populateModal = (state) => ({
                 const ava = document.createElement('img');
                 ava.setAttribute('src', `./icons/${gamePage.get(value).get('type').toLowerCase() + '_' + gamePage.get(value).get('symbol').toLowerCase() + i}.svg`);
                 contents.appendChild(ava);
-                
-                // Event Listner
-                ava.addEventListener('click', () => {
-                    gamePage.get(value).set('avatar', i);
-                    modal.classList.toggle('hidden');
-                    document.body.removeChild(modal);
-                    homePage.render('home-page');
-                    homePage.update('home-page');
-                });
 
                 // Add Current-avatar class
                 if(gamePage.get(value).get('avatar') === i) {
                     ava.classList.add('current-avatar');
                 }
+                
+                // Event Listner
+                ava.addEventListener('click', () => {
+                    gamePage.get(value).set('avatar', i);
+                    document.querySelector(value === 'playerX' ? '.x-img' : '.o-img').setAttribute('src', `./icons/${gamePage.get(value).get('type').toLowerCase() + '_' + gamePage.get(value).get('symbol').toLowerCase() + i}.svg`);
+                    document.body.removeChild(modal);
+                });  
             });
+        } else if('roundOver') {
+            const contents = modal.querySelector('.contents');
+            contents.classList.add('round-over-modal');
+
+            const para = document.createElement('p');
+            para.textContent = 'cool';
+            contents.appendChild(para);
+
+            contents.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+        } else if('gameOver') {
+
         }
     }
 });
@@ -424,41 +442,149 @@ const createBoardElement = (state) => ({
                 row.forEach((squareValue, colIndex) => {
                     const divSquare = document.createElement('div');
                     divSquare.classList.add('square');
-                        if(squareValue !== '') {
-                            // Img : Symbol
-                            const imgSymbol = document.createElement('img');
-                            imgSymbol.classList.add('symbol');
-                            if(squareValue === 'X') {
-                                imgSymbol.setAttribute('src', './icons/x_symbol.svg');
-                                imgSymbol.style = gamePage.get('playerX').get('filter');
-                            } else if(squareValue === 'O') {
-                                imgSymbol.setAttribute('src', './icons/o_symbol.svg');
-                                imgSymbol.style = gamePage.get('playerO').get('filter');
-                            }
-                            divSquare.appendChild(imgSymbol);
-                        }
+                        // if(squareValue !== '') {
+                        //     // Img : Symbol
+                        //     const imgSymbol = document.createElement('img');
+                        //     imgSymbol.classList.add('symbol');
+                        //     if(squareValue === 'X') {
+                        //         imgSymbol.setAttribute('src', './icons/x_symbol.svg');
+                        //         imgSymbol.style = gamePage.get('playerX').get('filter');
+                        //     } else if(squareValue === 'O') {
+                        //         imgSymbol.setAttribute('src', './icons/o_symbol.svg');
+                        //         imgSymbol.style = gamePage.get('playerO').get('filter');
+                        //     }
+                        //     divSquare.appendChild(imgSymbol);
+                        // }
 
                     // Game Loop That Updates Article
-                    // divSquare.addEventListener('click', () => {
-                    //     addMarkToBoard(rowIndex,colIndex);
+                    divSquare.addEventListener('click', () => {
+                        // return a img, if able to mark board with symbol
+                        const img = gamePage.addMarkToBoard(rowIndex,colIndex);
+                        if(typeof(img) !== 'undefined') {
+                            divSquare.appendChild(img);
+                        }
                        
-                    //     // Check if Round Over
-                    //     checkRoundOver();
+                        // Check if Round Over
+                        gamePage.set('roundOver', gamePage.checkRoundOver());
 
-                    //     // Do Something when Round Over
-                    //     if(gameState.roundOver) {
-                    //         clearArticle();
-                    //         renderGame();
-                    //         gameBoard.roundOverModal();
-                    //     } else {
-                    //       clearArticle();
-                    //       renderGame();
-                    //     }
-
-                    //     console.log("X Wins: " + gameState.xWins + ", O Wins: " + gameState.oWins + ", Current Round: " + gameState.currentRound);
-                    // });
+                        // Update display when Round Over
+                        if(gamePage.get('roundOver')) {
+                            state['modal'] = gamePage.createModal();
+                            gamePage.toggleModal();
+                            gamePage.populateModal('roundOver');
+                        }
+                        console.log("X Wins: " + gamePage.get('xWins') + ", O Wins: " + gamePage.get('oWins') + ", Current Round: " + gamePage.get('currentRound'));
+                    });
                     divGameBoard.appendChild(divSquare);
                 });
             });
     },
+});
+
+const addMarkToBoard = (state) => ({
+    addMarkToBoard: (x, y) => {
+        // Determing the Symbol to be assigned
+        squareValue = gamePage.get('xTurn') ? 'X' : 'O'
+        let img;
+
+        if(gamePage.get('board')[x][y] != 'X' && gamePage.get('board')[x][y] != 'O') {
+            // add squareValue to board
+            gamePage.get('board')[x][y] = squareValue.toLowerCase();
+
+            img = document.createElement('img');
+            img.setAttribute('src', `icons/${squareValue.toLowerCase()}_symbol.svg`);
+            img.classList.add('symbol');
+            img.style = gamePage.get(`player${squareValue}`).get('avatarFilter');
+
+            // Other play's turn
+            gamePage.set('xTurn', !gamePage.get('xTurn'));
+        }
+
+        return img;
+    },
+});
+
+const checkRoundOver = (state) => ({
+    checkRoundOver: () => {
+        let value = false;
+
+            // set game board to alt variable
+        let b = gamePage.get('board');
+
+        // Arr of symbols to each
+        let symbolArr = [gamePage.get('playerO').get('symbol'), gamePage.get('playerX').get('symbol')];
+
+        // If All squares of filled
+        value = b.every((row, rowIndex) =>
+            row.every((square, squareIndex) => square !== ''));
+
+        symbolArr.forEach((symbol) => {
+            // b[y][x]
+            // Left to Right
+            if(b[0][0] === symbol && b[0][1] === symbol && b[0][2] === symbol) {
+                // (0,0) (0,1) (0,2)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            } else if(b[1][0] === symbol && b[1][1] === symbol && b[1][2] === symbol) {
+                // (1,0) (1,1) (1,2)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            } else if(b[2][0] === symbol && b[2][1] === symbol && b[2][2] === symbol) {
+                // (2,0) (2,1) (2,2)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            }
+
+            // Up to Down
+            else if(b[0][0] === symbol && b[1][0] === symbol && b[2][0] === symbol) {
+                // (0,0) (1,0) (2,0)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            } else if(b[0][1] === symbol && b[1][1] === symbol && b[2][1] === symbol) {
+                // (0,1) (1,1) (2,1)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            } else if(b[0][2] === symbol && b[1][2] === symbol && b[2][2] === symbol) {
+                // (0,2) (1,2) (2,2)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            }
+
+            // Back Slash
+            else if(b[0][2] === symbol && b[1][1] === symbol && b[2][0] === symbol) {
+                // (0,2) (1,1) (2,0)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            }
+            
+            // Forward Slash
+            else if(b[0][0] === symbol && b[1][1] === symbol && b[2][2] === symbol) {
+                // (0,0) (1,1) (2,2)
+                // increase Player's Score
+                gamePage.playerWins(symbol);
+                value = true;
+            }
+        });
+
+        return value;
+    }
+});
+
+const playerWins = (state) => ({
+    playerWins: (symbol) => {
+        if(symbol === 'x') {
+            gamePage.set('xWins', gamePage.get('xWins') + 1);
+            gamePage.set('roundWinner', gamePage.get('playerX'));
+          } else {
+            gamePage.set('oWins', gamePage.get('oWins') + 1);
+            gamePage.set('roundWinner', gamePage.get('playerO'));
+          }
+    }, 
 });
