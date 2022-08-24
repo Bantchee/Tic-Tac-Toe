@@ -1,12 +1,22 @@
 // get a property of state
 const getter = (state) => ({
-    get: (name) => state[name],
+    get: (name) => {
+        if(Object.hasOwn(state, name)) {
+            return state[name];
+        } else {
+            console.error(`The property ${name} does not exist`);
+        }
+    },
 });
 
 // set a property of state
 const setter = (state) => ({
     set: (name, value) => {
-        state[name] = value
+        if(Object.hasOwn(state, name)) {
+            state[name] = value;
+        } else {
+            console.log(`The property ${name} does not exist`);
+        }
     },
 });
 
@@ -380,7 +390,7 @@ const createGamePlayerElement = (state) => ({
             // Img : Player Avatar SVG
             const imgPlayerAvatar = document.createElement('img');
             imgPlayerAvatar.classList.add('player-x-avatar', 'avatar-img');
-            imgPlayerAvatar.style = player.get('filter');
+            imgPlayerAvatar.style = player.get('avatarFilter');
             imgPlayerAvatar.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
             divPlayer.appendChild(imgPlayerAvatar);
 
