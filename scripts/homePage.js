@@ -25,6 +25,7 @@ const homePage = (() => {
         toggleModal(state),
         populateModal(state),
         update(state),
+        changeSvgColor(state),
     );
 
     // Private Methods

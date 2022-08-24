@@ -53,6 +53,28 @@ const update = (state) => ({
             state['playerX'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerX'));
             state['playerO'].querySelector('button').addEventListener('click', () => homePage.toggleModal('playerO'));
             state['playBtn'].addEventListener('click', () => homePage.playGame());
+            state['playerX'].querySelector('.color-wheel').addEventListener('change', homePage.changeSvgColor, false);
+            state['playerO'].querySelector('.color-wheel').addEventListener('change', homePage.changeSvgColor, false);
+            state['playerX'].querySelector('.input-name').addEventListener('focusout', (event) => {
+                gamePage.get('playerX').set('name', event.target.value);
+                state['playerX'].querySelector('.player-title').textContent = `Player ${gamePage.get('playerX').get('symbol').toUpperCase()} : ${gamePage.get('playerX').get('name')}`
+            });
+            state['playerX'].addEventListener('keydown', (event) => {
+                if(event.key === 'Enter') {
+                    gamePage.get('playerX').set('name', event.target.value);
+                    state['playerX'].querySelector('.player-title').textContent = `Player ${gamePage.get('playerX').get('symbol').toUpperCase()} : ${gamePage.get('playerX').get('name')}`
+                }  
+            });
+            state['playerO'].querySelector('.input-name').addEventListener('focusout', (event) => {
+                gamePage.get('playerO').set('name', event.target.value);
+                state['playerO'].querySelector('.player-title').textContent = `Player ${gamePage.get('playerO').get('symbol').toUpperCase()} : ${gamePage.get('playerO').get('name')}`
+            });
+            state['playerO'].addEventListener('keydown', (event) => {
+                if(event.key === 'Enter') {
+                    gamePage.get('playerO').set('name', event.target.value);
+                    state['playerO'].querySelector('.player-title').textContent = `Player ${gamePage.get('playerO').get('symbol').toUpperCase()} : ${gamePage.get('playerO').get('name')}`
+                }  
+            });
         }
     },
 });
@@ -92,7 +114,7 @@ const createHomePlayer = (state) => ({
 
             // P : Player Symbol + Player Name
             const para = document.createElement('p');
-            para.textContent = `Player ${player.get('symbol').toUpperCase()} : ${player.get('name')}`;
+            para.textContent = `Player ${player.get('symbol').toUpperCase()} :`;
             para.classList.add("player-title");
             divPlayer.appendChild(para);
 
@@ -110,6 +132,7 @@ const createHomePlayer = (state) => ({
                     const avatarImg = document.createElement('img');
                     avatarImg.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
                     avatarImg.classList.add(player.get('symbol') === 'x' ? 'x-img' : 'o-img');
+                    avatarImg.style = player.get('avatarFilter');
                     btnAvatar.append(avatarImg);
                 
                 // Div : Inputs
@@ -120,21 +143,9 @@ const createHomePlayer = (state) => ({
                     // Input : Name
                     const inputName = document.createElement('input');
                     inputName.setAttribute('placeholder', 'Name');
+                    inputName.setAttribute('value', player.get('name'));
+                    inputName.classList.add('input-name');
                     divInputs.appendChild(inputName);
-
-                    // Event Listner 
-                    inputName.addEventListener('focusout', () => {
-                        player.set('name', inputName.value);
-                        homePage.render('home-page');
-                        homePage.update('home-page');
-                    });
-                    inputName.addEventListener('keydown', (event) => {
-                        if(event.key === 'Enter') {
-                            player.set('name', inputName.value);
-                            homePage.render('home-page');
-                            homePage.update('home-page');
-                        }  
-                    });
 
                     // Input : Human, Easy AI, Hard AI
                     const selectHumanAI = document.createElement('select');
@@ -156,8 +167,7 @@ const createHomePlayer = (state) => ({
                         firstOption.addEventListener('click', () => {
                             player.set('type', firstOption.textContent.includes('Human') ? 'HUMAN' : 'AI');
                             player.set('difficulty', firstOption.textContent.includes('Easy') ? 1 : 2);
-                            homePage.render('home-page');
-                            homePage.update('home-page');
+                            avatarImg.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
                         });
 
                         // Second Option : Easy AI
@@ -174,8 +184,7 @@ const createHomePlayer = (state) => ({
                         secondOption.addEventListener('click', () => {
                             player.set('type', secondOption.textContent.includes('Human') ? 'HUMAN' : 'AI');
                             player.set('difficulty', secondOption.textContent.includes('Easy') ? 1 : 2);
-                            homePage.render('home-page');
-                            homePage.update('home-page');
+                            avatarImg.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
                         });
 
                         // Third Option : Hard AI
@@ -192,8 +201,7 @@ const createHomePlayer = (state) => ({
                         thirdOption.addEventListener('click', () => {
                             player.set('type', thirdOption.textContent.includes('Human') ? 'HUMAN' : 'AI');
                             player.set('difficulty', thirdOption.textContent.includes('Easy') ? 1 : 2);
-                            homePage.render('home-page');
-                            homePage.update('home-page');
+                            avatarImg.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
                         });
 
                     // Div : Color Wheel Picker
@@ -203,12 +211,10 @@ const createHomePlayer = (state) => ({
 
                         // Input : Color Wheel Picker
                         const inputColorPicker = document.createElement('input');
-                        inputColorPicker.classList.add(player.get('symbol') === 'x' ? 'x-color' : 'o-color');
+                        inputColorPicker.classList.add('color-wheel');
+                        inputColorPicker.classList.add(`${player.get('symbol')}-color`);
                         inputColorPicker.setAttribute('type', 'color');
                         divColor.appendChild(inputColorPicker);
-
-                        // Event Listner
-                        inputColorPicker.addEventListener('change', changeSvgColor, false);
 
                         // Label : Color
                         const labelColorPicker = document.createElement('label');
@@ -300,22 +306,24 @@ const populateModal = (state) => ({
 });
 
 // Changes the color of SVG images
-function changeSvgColor(event) {
-    const rgb = hexToRgb(event.target.value);
-    const color = new Color(rgb[0], rgb[1], rgb[2]);
-    const solver = new Solver(color);
-    const result = solver.solve();
+const changeSvgColor = (state) => ({
+    changeSvgColor: (event) => {
+        const rgb = hexToRgb(event.target.value);
+        const color = new Color(rgb[0], rgb[1], rgb[2]);
+        const solver = new Solver(color);
+        const result = solver.solve();
+        
+        if(event.target.classList.contains('x-color')) {
+            img = document.querySelector('.x-img');
+            gamePage.get('playerX').set('avatarFilter', result.filter);
+        } else {
+            img = document.querySelector('.o-img');
+            gamePage.get('playerO').set('avatarFilter', result.filter);
+        }
     
-    if(event.target.classList.contains('x-color')) {
-        img = document.querySelector('.x-img');
-        gamePage.get('playerX').set('filter', result.filter);
-    } else {
-        img = document.querySelector('.o-img');
-        gamePage.get('playerO').set('filter', result.filter);
-    }
-
-    img.style = result.filter;
-}
+        img.style = result.filter;
+    },
+});
 
 const createGameContainer = (state) => ({
     createGameContainer: () => {
@@ -365,7 +373,8 @@ const createGamePlayerElement = (state) => ({
             // Para : Player Name
             const paraPlayerName = document.createElement('p');
             paraPlayerName.classList.add('player-name');
-            paraPlayerName.textContent = player.get('name');
+            let playerName = player.get('name');
+            paraPlayerName.textContent = playerName === '' ? `Player ${player.get('symbol').toUpperCase()}` : playerName;
             divPlayer.appendChild(paraPlayerName);
 
             // Img : Player Avatar SVG
