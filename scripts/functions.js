@@ -487,7 +487,7 @@ const addMarkToBoard = (state) => ({
         squareValue = gamePage.get('xTurn') ? 'X' : 'O'
         let img;
 
-        if(gamePage.get('board')[x][y] != 'X' && gamePage.get('board')[x][y] != 'O') {
+        if(gamePage.get('board')[x][y] != 'x' && gamePage.get('board')[x][y] != 'x') {
             // add squareValue to board
             gamePage.get('board')[x][y] = squareValue.toLowerCase();
 
