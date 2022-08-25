@@ -426,6 +426,8 @@ const createGamePlayerElement = (state) => ({
             //     gameBoard.gameOverModal(player);
             //   });
             divPlayer.appendChild(btnPlayerForfeit);
+
+        return divPlayer;
     },
 });
 
@@ -496,8 +498,10 @@ const addMarkToBoard = (state) => ({
             img.classList.add('symbol');
             img.style = gamePage.get(`player${squareValue}`).get('avatarFilter');
 
-            // Other play's turn
+            // Other play's turn, toggle .hidden on turn-indicators
             gamePage.set('xTurn', !gamePage.get('xTurn'));
+            gamePage.get(`playerXElement`).querySelector('.turn-indicator').classList.toggle('hidden');
+            gamePage.get(`playerOElement`).querySelector('.turn-indicator').classList.toggle('hidden');
         }
 
         return img;
