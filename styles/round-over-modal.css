@@ -1,4 +1,4 @@
-.round-over-content {
+.round-over-modal  {
     background-color: white;
     border: 5px solid black;
     border-radius: 10px;
@@ -12,12 +12,12 @@
     row-gap: 40px;
 }
 
-.round-over-content p {
+.round-over-modal p {
     font-size: 24px;
     font-weight: bold;
 }
 
-.round-over-content button {
+.round-over-modal button {
     font-size: 24px;
     font-weight: bold;
     padding: 10px;
@@ -27,6 +27,6 @@
     cursor: pointer;  
 }
 
-.round-over-content button:hover {
+.round-over-modal button:hover {
     background-color: #ccc;
 }

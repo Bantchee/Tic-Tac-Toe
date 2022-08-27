@@ -320,13 +320,21 @@ const populateModal = (state) => ({
             const contents = modal.querySelector('.contents');
             contents.classList.add('round-over-modal');
 
+            // Para : Player that wins
             const para = document.createElement('p');
-            para.textContent = 'cool';
+            para.textContent = `${gamePage.get(((gamePage.get('xTurn')) ? 'playerO' : 'playerX')).get('name')} wins round ${gamePage.get('currentRound')}`;
             contents.appendChild(para);
-
-            contents.addEventListener('click', () => {
-                document.body.removeChild(modal);
-            });
+            
+            // Btn : Continue
+            const btn = document.createElement('button');
+            btn.textContent = 'Continue';
+            contents.appendChild(btn);
+                // Event listner Click - reset game board / update round and win in layout
+                btn.addEventListener('click', () => {
+                    gamePage.newRound();
+                    gamePage.render();
+                    document.body.removeChild(document.body.querySelector('.background'));
+                });
         } else if('gameOver') {
 
         }
@@ -401,8 +409,9 @@ const createGamePlayerElement = (state) => ({
             // Para : Player Name
             const paraPlayerName = document.createElement('p');
             paraPlayerName.classList.add('player-name');
-            let playerName = player.get('name');
-            paraPlayerName.textContent = playerName === '' ? `Player ${player.get('symbol').toUpperCase()}` : playerName;
+            player.set('name', ((player.get('name') === '') ? `Player ${player.get('symbol').toUpperCase()}` : player.get('name')));
+
+            paraPlayerName.textContent = player.get('name');
             divPlayer.appendChild(paraPlayerName);
 
             // Img : Player Avatar SVG
@@ -591,4 +600,15 @@ const playerWins = (state) => ({
             gamePage.set('roundWinner', gamePage.get('playerO'));
           }
     }, 
+});
+
+const newRound = (state) => ({
+    newRound: () => {
+        state['board'] = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+        ];
+        
+    },
 });
