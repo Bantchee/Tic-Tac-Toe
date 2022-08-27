@@ -19,7 +19,7 @@ const gamePage = (() => {
         oWins: 0,
         roundOver: false,
         roundWinner: null,
-        gameWinnder: null,
+        gameWinner: null,
         playerX : Player('x', 'human', '', 1, '', 0),
         playerO : Player('o', 'AI', '', 1, '', 1),
     }
@@ -40,6 +40,7 @@ const gamePage = (() => {
         createModal(state),
         toggleModal(state),
         populateModal(state),
+        newRound(state),
     );
 
     const resetBoard = () => {

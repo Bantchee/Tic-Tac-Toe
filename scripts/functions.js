@@ -32,13 +32,12 @@ const render = (state) => ({
         // Create Children
         if(id === 'game-page') {
             state['page'] = gamePage.createPage(id);
+            state['modal'] = gamePage.createModal();
             state['roundElement'] = gamePage.createRoundElement();
             state['containerElement'] = gamePage.createGameContainer();
             state['playerXElement'] = gamePage.createGamePlayerElement(gamePage.get('playerX'));
             state['boardElement'] = gamePage.createBoardElement();
             state['playerOElement'] = gamePage.createGamePlayerElement(gamePage.get('playerO'));
-            
-            
         } else if(id === 'home-page') {
             state['page'] = homePage.createPage(id);
             state['container'] = homePage.createHomeContainer();
@@ -297,6 +296,7 @@ const populateModal = (state) => ({
     populateModal: (value) => {
         let modal = state['modal'];
         if(value === 'playerX' || value === 'playerO') {
+            // Avatar Modal
             let contents = modal.querySelector('.contents');
             contents.classList.add('avatar-modal');
             gamePage.get('avatarArr').forEach((i) => {
@@ -316,13 +316,33 @@ const populateModal = (state) => ({
                     document.body.removeChild(modal);
                 });  
             });
-        } else if('roundOver') {
+        }
+        
+        if(value === 'gameOver') {
+            console.log('cool');
+            const contents = modal.querySelector('.contents');
+            contents.classList.add('game-over-modal');
+
+            // Para : Player that wins
+            const para = document.createElement('p');
+            para.textContent = `cool`;
+            contents.appendChild(para);
+            contents.addEventListener('click', () => {
+                while(contents.firstChild) {
+                    gamePage.toggleModal();
+                    contents.removeChild(contents.firstChild)
+                }
+            });
+        } 
+        
+        if(value === 'roundOver') {
+            gamePage.toggleModal
             const contents = modal.querySelector('.contents');
             contents.classList.add('round-over-modal');
 
             // Para : Player that wins
             const para = document.createElement('p');
-            para.textContent = `${gamePage.get(((gamePage.get('xTurn')) ? 'playerO' : 'playerX')).get('name')} wins round ${gamePage.get('currentRound')}`;
+            para.textContent = `${gamePage.get('roundWinner').get('name')} wins round ${gamePage.get('currentRound')}`;
             contents.appendChild(para);
             
             // Btn : Continue
@@ -332,12 +352,10 @@ const populateModal = (state) => ({
                 // Event listner Click - reset game board / update round and win in layout
                 btn.addEventListener('click', () => {
                     gamePage.newRound();
-                    gamePage.render();
                     document.body.removeChild(document.body.querySelector('.background'));
+                    gamePage.render('game-page');
                 });
-        } else if('gameOver') {
-
-        }
+        } 
     }
 });
 
@@ -421,19 +439,19 @@ const createGamePlayerElement = (state) => ({
             imgPlayerAvatar.setAttribute('src', `./icons/${player.get('type').toLowerCase() + '_' + player.get('symbol').toLowerCase() + player.get('avatar')}.svg`);
             divPlayer.appendChild(imgPlayerAvatar);
 
-            // Para : Player X Wins
+            // Para : Player
             const paraPlayerWins = document.createElement('p');
             paraPlayerWins.classList.add('player-wins');
-            paraPlayerWins.textContent = gamePage.get('xWins');
+            paraPlayerWins.textContent = gamePage.get(((player.get('symbol') === 'x') ? 'xWins' : 'oWins'));
             divPlayer.appendChild(paraPlayerWins);
 
             // Btn : Forfeit
             const btnPlayerForfeit = document.createElement('button');
             btnPlayerForfeit.classList.add('forfeit');
             btnPlayerForfeit.textContent = 'Forfeit';
-            // btnPlayerForfeit.addEventListener('click', () => {
-            //     gameBoard.gameOverModal(player);
-            //   });
+            btnPlayerForfeit.addEventListener('click', () => {
+                gamePage.populateModal('gameOver');
+              });
             divPlayer.appendChild(btnPlayerForfeit);
 
         return divPlayer;
@@ -468,6 +486,7 @@ const createBoardElement = (state) => ({
                         // }
 
                     // Game Loop That Updates Article
+                    // This will need to be changed to add AI to game
                     divSquare.addEventListener('click', () => {
                         // return a img, if able to mark board with symbol
                         const img = gamePage.addMarkToBoard(rowIndex,colIndex);
@@ -480,9 +499,16 @@ const createBoardElement = (state) => ({
 
                         // Update display when Round Over
                         if(gamePage.get('roundOver')) {
-                            state['modal'] = gamePage.createModal();
                             gamePage.toggleModal();
-                            gamePage.populateModal('roundOver');
+                            if(gamePage.get('xWins') - gamePage.get('oWins') > 2) {
+                                gamePage.set('gameWinner', gamePage.get('playerX'));
+                                gamePage.populateModal('gameOver');
+                            } else if(gamePage.get('oWins') - gamePage.get('xWins') > 2) {
+                                gamePage.set('gameWinner', gamePage.get('playerO'));
+                                gamePage.populateModal('gameOver');
+                            } else {
+                                gamePage.populateModal('roundOver');
+                            }
                         }
                         console.log("X Wins: " + gamePage.get('xWins') + ", O Wins: " + gamePage.get('oWins') + ", Current Round: " + gamePage.get('currentRound'));
                     });
@@ -609,6 +635,8 @@ const newRound = (state) => ({
             ['', '', ''],
             ['', '', ''],
         ];
-        
+        state['currentRound'] += 1;
+        state['roundOver'] = false;
+        state['roundWinner'] = null;
     },
 });
