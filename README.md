@@ -23,8 +23,6 @@ A Tic Tac Toe Game. This is a project from [The Odin Project](<https://www.theod
     * Player Round Wins Indicator
     * Player Forfiet Buttons
 ## Concepts Learned
-* MinMax Algorithm
-* Game Loops
 * Modules
 * Factories
 * Composition
@@ -39,6 +37,8 @@ A Tic Tac Toe Game. This is a project from [The Odin Project](<https://www.theod
 * Google Docs
 
 ## Future Feature Ideas
+* MinMax Algorithm
+* Game Loops
 * Changing Symbols
 * Uploading custom Avatars
 * Music
