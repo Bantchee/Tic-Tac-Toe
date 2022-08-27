@@ -38,6 +38,7 @@ const render = (state) => ({
             state['playerXElement'] = gamePage.createGamePlayerElement(gamePage.get('playerX'));
             state['boardElement'] = gamePage.createBoardElement();
             state['playerOElement'] = gamePage.createGamePlayerElement(gamePage.get('playerO'));
+            gamePage.update('game-page');
         } else if(id === 'home-page') {
             state['page'] = homePage.createPage(id);
             state['container'] = homePage.createHomeContainer();
@@ -45,6 +46,7 @@ const render = (state) => ({
             state['vs'] = homePage.createVs();
             state['playerO'] = homePage.createHomePlayer(gamePage.get('playerO'));
             state['playBtn'] = homePage.createPlayBtn();
+            homePage.update('home-page');
         }
 
         // add page
@@ -319,24 +321,27 @@ const populateModal = (state) => ({
         }
         
         if(value === 'gameOver') {
-            console.log('cool');
+            gamePage.toggleModal();
             const contents = modal.querySelector('.contents');
             contents.classList.add('game-over-modal');
 
             // Para : Player that wins
             const para = document.createElement('p');
-            para.textContent = `cool`;
+            para.textContent = `Game Over! ${gamePage.get('gameWinner').get('name')} wins!`;
             contents.appendChild(para);
+            // BTN : New Game
+            const btn = document.createElement('button');
+            btn.textContent = 'New Game';
+            contents.appendChild(btn);
+
             contents.addEventListener('click', () => {
-                while(contents.firstChild) {
-                    gamePage.toggleModal();
-                    contents.removeChild(contents.firstChild)
-                }
+                document.body.removeChild(modal);
+                gamePage.newGame();
             });
         } 
         
         if(value === 'roundOver') {
-            gamePage.toggleModal
+            gamePage.toggleModal();
             const contents = modal.querySelector('.contents');
             contents.classList.add('round-over-modal');
 
@@ -352,7 +357,8 @@ const populateModal = (state) => ({
                 // Event listner Click - reset game board / update round and win in layout
                 btn.addEventListener('click', () => {
                     gamePage.newRound();
-                    document.body.removeChild(document.body.querySelector('.background'));
+                    gamePage.toggleModal();
+                    document.body.removeChild(modal);
                     gamePage.render('game-page');
                 });
         } 
@@ -450,6 +456,7 @@ const createGamePlayerElement = (state) => ({
             btnPlayerForfeit.classList.add('forfeit');
             btnPlayerForfeit.textContent = 'Forfeit';
             btnPlayerForfeit.addEventListener('click', () => {
+                gamePage.set('gameWinner', ((player.get('symbol') === 'x') ? gamePage.get('playerX') : gamePage.get('playerO')));
                 gamePage.populateModal('gameOver');
               });
             divPlayer.appendChild(btnPlayerForfeit);
@@ -499,7 +506,6 @@ const createBoardElement = (state) => ({
 
                         // Update display when Round Over
                         if(gamePage.get('roundOver')) {
-                            gamePage.toggleModal();
                             if(gamePage.get('xWins') - gamePage.get('oWins') > 2) {
                                 gamePage.set('gameWinner', gamePage.get('playerX'));
                                 gamePage.populateModal('gameOver');
@@ -638,5 +644,26 @@ const newRound = (state) => ({
         state['currentRound'] += 1;
         state['roundOver'] = false;
         state['roundWinner'] = null;
+    },
+});
+
+const newGame = (state) => ({
+    newGame: () => {
+        state['board'] = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+            ];
+        state['currentRound'] = 1;
+        state['xTurn'] = true;
+        state['xWins'] = 0; 
+        state['oWins'] = 0;
+        state['roundOver'] = false;
+        state['roundWinner'] = null;
+        state['gameWinner'] = null;
+        state['playerX'] = Player('x', 'human', '', 1, '', 0);
+        state['playerO'] = Player('o', 'AI', '', 1, '', 1);
+
+        homePage.render('home-page');
     },
 });

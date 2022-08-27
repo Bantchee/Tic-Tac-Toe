@@ -41,15 +41,8 @@ const gamePage = (() => {
         toggleModal(state),
         populateModal(state),
         newRound(state),
+        newGame(state),
     );
-
-    const resetBoard = () => {
-        gamePage.board =[
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', '']
-        ];
-    };
 
     state.page = public.createPage('game-page');
 
